@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Buy cool new product</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+  </head>
+  <body>
+    <section>
+      <form action="/purchase" method="POST">
+        <input type = "text" name = "object" placeholder = "object" />
+        <br>
+        <input type = "text" name = "name" placeholder = "name" />
+        <br>
+        <input type = "text" name = "amount" placeholder = "amount" />
+        <br>
+        <button type="submit" id="checkout-button">Checkout</button>
+      </form>
+    </section>
+  </body>
+</html>
