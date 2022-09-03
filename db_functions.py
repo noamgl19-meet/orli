@@ -7,10 +7,14 @@
 import mysql.connector
 
 # constants
-DB_HOST = "127.0.0.1"
-DB = "bakery"
-DB_USERNAME = "root"
-DB_PASSWORD = "xzaq1234"
+DB_HOST = "remotemysql.com"
+DB = "1mNoZy71nc"
+DB_USERNAME = "1mNoZy71nc"
+DB_PASSWORD = "jiDjaLfrZT"
+# DB_HOST = "127.0.0.1"
+# DB = "bakery"
+# DB_USERNAME = "root"
+# DB_PASSWORD = "xzaq1234"
 DB_AUTH_PLUGIN = "mysql_native_password"
 
 

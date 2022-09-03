@@ -84,33 +84,33 @@ class createProductHandler(Resource):
 
             tags = ""
 
-        # try:
+        try:
 
-        # create the product
-        add_product(obj, name, price, description, tags, images)
+            # create the product
+            add_product(obj, name, price, description, tags, images)
 
-        # get new id
-        product_id, name, price, description, tags, images = object_by_name(obj, name)
+            # get new id
+            product_id, name, price, description, tags, images = object_by_name(obj, name)
 
-        # define a product name in the stripe store
-        product_name = f"{product_id}:{obj}"
+            # define a product name in the stripe store
+            product_name = f"{product_id}:{obj}"
 
-        # create product in stripe
-        create_stripe_product(product_name, name, price)
+            # create product in stripe
+            create_stripe_product(product_name, name, price)
 
-        return {
+            return {
 
-            'message': f"Successfully created {product_name}."
+                'message': f"Successfully created {product_name}."
 
-        }
+            }
 
-        # except:
+        except:
 
-        #     return {
+            return {
 
-        #         'message': "Error."
+                'message': "Error."
 
-        #     }
+            }
 
     
     def get(self):

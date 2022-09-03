@@ -15,79 +15,6 @@ VALID_FIELDS = ['id', 'name', 'price', 'description', 'tages', 'images']
 VALID_CART_ACTIONS = ['add', 'remove']
 
 
-def add_to_cart(product_id, obj):
-    """
-        Takes product id and adds it to cart
-    """
-
-    print(session['cart'])
-
-    session['cart'].append({'id': product_id, 'object': obj})
-
-    print(session['cart'])
-
-
-def remove_from_cart(product_id, obj):
-    """
-        Takes product id and adds it to cart
-    """
-
-    print(session['cart'])
-
-    session['cart'].remove({'id': product_id, 'object': obj})
-
-    print(session['cart'])
-
-
-# # class for cart functions
-# class cartHandler(Resource):
-
-
-#     def post(self):
-
-#         # method not allowed
-#         return {
-
-#             'message': 'Error: method post not allowed.'
-
-#         }
-
-    
-#     def get(self):
-
-#         # define which values are supported
-#         parser = reqparse.RequestParser()
-#         parser.add_argument('object', type = str, required = True)
-#         parser.add_argument('action', type = str, required = True)
-#         parser.add_argument('id', type = int, required = True)
-
-#         # get arguments
-#         args = parser.parse_args()
-#         obj = args['object']
-#         action = args['action']
-#         product_id = args['id']
-
-#         # check if the action is allowd
-#         if not action in VALID_CART_ACTIONS:
-
-#             return {
-
-#                 "message": f"Error: 'action' attribute has to be one of: {VALID_CART_ACTIONS}."
-
-#             }
-
-#         # check if it is add to cart
-#         elif action == "add":
-
-#             # add to cart
-#             add_to_cart(product_id, obj)
-
-#         # if it is remove
-#         else:
-
-#             remove_from_cart(product_id, obj)
-
-
 # class for manage the db
 class manageHandler(Resource):
 
@@ -229,8 +156,6 @@ class objectsHandler(Resource):
             'message': final_objects
 
         }
-
-        print(data)
 
         return data
 
