@@ -22,5 +22,6 @@ urlpatterns = [
     path('objects/', views.objects, name = 'objects'),
     path('manage/', views.manage, name = 'manage'),
     path('purchase/', views.purchase, name = 'purchase'),
-    path('create_product/', views.create_product, name = 'create_product')
+    path('create_product/', views.create_product, name = 'create_product'),
+    path('sendmail/', views.sendmail, name = 'sendmail')
 ]

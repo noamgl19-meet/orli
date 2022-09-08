@@ -9,11 +9,7 @@
     <section>
       <form action="/purchase/" method="POST">
         {% csrf_token %}
-        <input type = "text" name = "object" placeholder = "object" />
-        <br>
-        <input type = "text" name = "name" placeholder = "name" />
-        <br>
-        <input type = "text" name = "amount" placeholder = "amount" />
+        <input type = "text" name = "data" placeholder = "object" />
         <br>
         <button type="submit" id="checkout-button">Checkout</button>
       </form>

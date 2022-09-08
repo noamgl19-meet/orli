@@ -8,6 +8,7 @@ from django.core.mail import send_mail
 import json
 from . import db_functions as db
 import stripe
+import ast
 
 # constants
 VALID_OBJECTS = ['cakes', 'cookies', 'packages']
@@ -57,6 +58,30 @@ def index(request):
 
     return HttpResponse(template.render(context,request))
 
+
+def sendmail(request):
+    """
+        This function takes fullname, phone, email and content and sends.
+    """
+
+    # get data
+    fullname = request.GET['fullname']
+    phone = request.GET['phone']
+    email = request.GET['email']
+    content = request.GET['content']
+
+    subject = f"{fullname} - {phone}"
+
+    # send mail
+    send_mail(
+
+        subject,
+        content,
+        'noamg.j2@gmail.com',
+        ['noamg.j2@gmail.com'],
+        fail_silently=False,
+
+    )
 
 def objects(request):
     """
@@ -175,65 +200,86 @@ def purchase(request):
     """
 
     # get the data
-    obj = request.POST['object']
-    name = request.POST['name']
-    amount = request.POST['amount']
+    # obj = request.POST['object']
+    # name = request.POST['name']
+    # amount = request.POST['amount']
 
-    # get the id of the product
-    product_id = db.object_by_name(obj, name)[0]
-    product_name = f"{product_id}:{obj}"
-
-    # check if the object is in the valud objects list
-    if obj not in VALID_OBJECTS:
-
-        return {
-
-            'message': f"Error: 'object' argument is required and has to be on of: {VALID_OBJECTS}."
-
-        }
-
-    # init empty price_id
-    price_id = ""
+    data = ast.literal_eval(request.POST['data'])
 
     # get all products
     all_products = stripe.Product.list()["data"]
 
-    # go through the products
-    for product in all_products:
+    # init cart items
+    cart_items = []
 
-        # check if the id aint None
-        if product['description'] != None:
+    # go through data sent
+    for item in data:
 
-            # check if the name equals to our given name
-            if product['description'] == product_name:
+        # unpack the item
+        try:
 
-                price_id = product["default_price"]
+            item = dict(item)
+            obj = item['object']
+            name = item['name']
+            amount = item['amount']
 
-    # make the purchase
-    try:
+        except:
 
-        checkout_session = stripe.checkout.Session.create(
+            # skip
+            continue
+
+        print("here")
+        # get the id of the product
+        product_id = db.object_by_name(obj, name)[0]
+        product_name = f"{product_id}:{obj}"
+
+        # init empty price_id
+        price_id = ""
+
+        # go through the products
+        for product in all_products:
+
+            # check if the id aint None
+            if product['description'] != None:
+
+                # check if the name equals to our given name
+                if product['description'] == product_name:
+
+                    price_id = product["default_price"]
+
+        # check if price_id is still none
+        if price_id == "":
             
-            line_items=[
+            # skip
+            continue
+        
+        # append to cart items
+        cart_items.append({'price': price_id, 'quantity': amount})
+
+    # check if there are any items in cart
+    if len(cart_items) > 0:
+
+        # make the purchase
+        try:
+
+            checkout_session = stripe.checkout.Session.create(
                 
-                {
-                    # Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-                    'price': price_id,
-                    'quantity': amount
-                }
+                line_items=cart_items,
+                mode='payment',
+                success_url=YOUR_DOMAIN + '/success.html',
+                cancel_url=YOUR_DOMAIN + '/cancel.html'
 
-            ],
-            mode='payment',
-            success_url=YOUR_DOMAIN + '/success.html',
-            cancel_url=YOUR_DOMAIN + '/cancel.html'
+            )
 
-        )
+        except Exception as e:
 
-    except Exception as e:
+            return HttpResponse(json.dumps({'error': str(e)}), content_type="application/json")
 
-        return HttpResponse(json.dumps({'error': str(e)}), content_type="application/json")
+        return redirect(checkout_session.url, code=303)
 
-    return redirect(checkout_session.url, code=303)
+    else:
+
+        return HttpResponse(json.dumps({'error': 'Cart is empty'}), content_type="application/json")
 
 
 def create_product(request):
