@@ -1,9 +1,12 @@
+# django imports
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.template import loader
+from django.core.mail import send_mail
+
+# other imports
 import json
 from . import db_functions as db
-
 import stripe
 
 # constants
