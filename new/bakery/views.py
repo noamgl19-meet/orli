@@ -136,7 +136,14 @@ def manage(request):
     obj = request.GET['object']
     action = request.GET['action']
     product_id = request.GET['id']
-    price = request.GET['price']
+
+    try:
+
+        price = request.GET['price']
+
+    except:
+
+        pass
 
 
     # check if the object is valid
@@ -353,7 +360,7 @@ def set_story(request):
     try:
 
         # get the data
-        story = request.GET['story']
+        story = request.POST['story']
 
     except:
 

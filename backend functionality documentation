@@ -1,0 +1,54 @@
+### OBJECT MANIPULATION ###
+
+GETTING OBJECTS (cakes, cookies, packages):
+In order to recieve the objects you will need to do the following:
+http://host:port/objects?object=<objectType>&tags=<tag>
+<objectType> is the type of the object and it can be one of the following: cakes, cookies, packages.
+<tag> is the tag you would like to filter by. if you dont want any tags, just do not include this argument in the get request.
+
+UPDATING PRICE:
+In order to update a product price you will need to do the following:
+http://host:port/manage?action=update&object=<objectType>&id=<productID>&price=<newPrice>
+<objectType> is the type of the object and it can be one of the following: cakes, cookies, packages.
+<productID> is the id of the product you wish to update.
+<newPrice> is the new price of the product.
+
+DELETING A PRODUCT:
+In order to delete a product you will need to do the following:
+http://host:port/manage?action=delete&object=<objectType>&id=<productID>
+<objectType> is the type of the object and it can be one of the following: cakes, cookies, packages.
+<productID> is the id of the product you wish to update.
+
+CREATING A PRODUCT:
+In order to create a product you will need to do the following:
+http://host:port/create_product/
+
+The method of request will be POST this time and it will contain the following values:
+object: the object type: cakes, cookies, packages.
+name: the name of the product.
+price: the price of the product in float format (can also be int).
+description: the description of the product.
+tags: the tags of the product.
+images: images link to the product divided by ",".
+
+
+### CHECKOUT ###
+
+In order to execute checkout you will need to do the following:
+http://host:port/purchase/
+
+The method of the request will be POST and it will contain the following values:
+data: a list of products to be checked out (or an array in JS) that looks like the following: [{object: <objectType>, name: <productName>, amount: <amount>}]
+
+### STORY ###
+
+CHANGE STORY:
+In order to change the story you will need to do the following:
+http://host:port/set_story/
+
+the method of the request will be POST and it will contain the following values:
+story: a string that will be the new story.
+
+GET OUR STORY:
+In order to get the story you will need to do the following:
+http://host:port/get_story/
