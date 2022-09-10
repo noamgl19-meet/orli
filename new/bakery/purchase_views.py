@@ -19,6 +19,54 @@ YOUR_DOMAIN = "http://localhost:8000"
 stripe.api_key = 'sk_test_51FEENmLXM9Y1aZOIN1YMw9RndUORhwcd5ZBvXZWGja1KAyU7fHLWqUHlJruxMFA4djrdDNEKvqU4NSc3mchndf7E0025oflX8N'
 
 
+def delete_stripe_product(product_name):
+    """
+        Deletes stripe product by his id.
+    """
+
+    # get all products
+    products = stripe.Product.list()
+
+    # go through products
+    for product in products:
+
+        if product['description'] == product_name:
+
+            final_product = product
+
+    # make the change
+    stripe.Product.modify(final_product['id'], default_price = "", active = False)
+
+
+def update_stripe_price(product_name, price):
+    """
+        Updates price of a product.
+    """
+
+    # get all products
+    products = stripe.Product.list()
+
+    # go through products
+    for product in products:
+
+        if product['description'] == product_name:
+
+            final_product = product
+
+    newprice = int(float(price) * 100)
+
+    # create a new price
+    price_object = stripe.Price.create(
+        unit_amount = newprice,
+        currency = CURRENCY,
+        product = final_product['id']
+    )
+    
+    price_id = price_object['id']
+
+    stripe.Product.modify(final_product['id'], default_price = price_id)
+
+
 def create_stripe_product(description, name, price):
     """
         Takes a name and a price and create a stripe object.

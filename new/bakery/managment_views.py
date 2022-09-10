@@ -66,6 +66,8 @@ def manage(request):
     action = request.GET['action']
     product_id = request.GET['id']
 
+    product_name = f"{product_id}:{obj}"
+
     try:
 
         price = request.GET['price']
@@ -97,6 +99,7 @@ def manage(request):
     elif action == "delete":
         
         db.delete_product(obj, product_id)
+        pr.delete_stripe_product(product_name)
 
         data = json.dumps({
 
@@ -108,6 +111,7 @@ def manage(request):
     elif action == "update":
 
         db.update_product(obj, product_id, "price", price)
+        pr.update_stripe_price(product_name, price)
 
         data = json.dumps("Success")
 
