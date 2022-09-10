@@ -30,7 +30,7 @@ def set_story(request):
     try:
 
         # get the data
-        story = request.POST['story']
+        story = request.POST.get('story')
 
     except:
 
