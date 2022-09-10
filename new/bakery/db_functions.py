@@ -162,3 +162,45 @@ def add_product(obj, name, price, description, tags, images):
 
     # close the connection
     close_connection(conn, cur)
+
+
+def add_purchase(obj, name, amount, time):
+    """
+        Creates a row in the purhcase table.
+    """
+
+    # create a connection
+    conn, cur = connection()
+
+    # query
+    query = f'insert into purchase (object, name, amount, time) values ("{obj}", "{name}", "{amount}", "{time}")'
+
+    # execute the query
+    cur.execute(query)
+    conn.commit()
+
+    # close the connection
+    close_connection(conn, cur)
+
+
+def get_purchase():
+    """
+        Return all rows from purchase table.
+    """
+
+    # create a connection
+    conn, cur = connection()
+
+    # query
+    query = f'select * from purchase'
+
+    # execute the query
+    cur.execute(query)
+
+    # keep the answer
+    result = cur.fetchall()
+
+    # close the connection
+    close_connection(conn, cur)
+
+    return result

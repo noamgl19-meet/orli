@@ -128,11 +128,12 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 APPEND_SLASH=True
 
+CORS_ALLOW_ALL_ORIGINS = True
+
+# SMTP CONFIG
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = ''
+EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
-
-CORS_ALLOW_ALL_ORIGINS = True
+EMAIL_HOST_USER = "noamg.j2@gmail.com"
+EMAIL_HOST_PASSWORD = "tmoqlnjswmpmgcft"

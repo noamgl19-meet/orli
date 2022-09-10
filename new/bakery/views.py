@@ -2,13 +2,15 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.template import loader
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMessage
+from django.conf import settings
 
 # other imports
 import json
 from . import db_functions as db
 import stripe
 import ast
+import datetime
 
 # constants
 VALID_OBJECTS = ['cakes', 'cookies', 'packages']
@@ -21,6 +23,34 @@ STORY_FILE = "./bakery/ourStory"
 # stripe config
 YOUR_DOMAIN = "http://localhost:8000"
 stripe.api_key = 'sk_test_51FEENmLXM9Y1aZOIN1YMw9RndUORhwcd5ZBvXZWGja1KAyU7fHLWqUHlJruxMFA4djrdDNEKvqU4NSc3mchndf7E0025oflX8N'
+
+
+def mail_logic(subject, content, to):
+    """
+        This actually sends an email.
+    """
+    
+    try:
+
+        # create the email object
+        email = EmailMessage(
+
+            subject,
+            content,
+            settings.EMAIL_HOST_USER,
+            to,
+
+            )
+        email.fail_silently = False
+
+        # send the email
+        email.send()
+
+        return 0
+
+    except:
+
+        return 1
 
 
 def create_stripe_product(description, name, price):
@@ -69,20 +99,22 @@ def sendmail(request):
     fullname = request.GET['fullname']
     phone = request.GET['phone']
     email = request.GET['email']
-    content = request.GET['content']
+    content = str(email) + "\n" + str(request.GET['content'])
 
     subject = f"{fullname} - {phone}"
 
     # send mail
-    send_mail(
+    result = mail_logic(subject = subject, content = content, to = ["noamg.j2@gmail.com"])
 
-        subject,
-        content,
-        'noamg.j2@gmail.com',
-        ['noamg.j2@gmail.com'],
-        fail_silently=False,
+    # check if good
+    if result == 0:
 
-    )
+        return HttpResponse(json.dumps("Success"))
+    
+    else:
+
+        return HttpResponse(json.dumps("Failed"))
+
 
 def objects(request):
     """
@@ -190,16 +222,45 @@ def manage(request):
     return HttpResponse(data, content_type="application/json")
 
 
+def success(request):
+    """
+        This adds the purchase to history.
+    """
+
+    # get data
+    cart = ast.literal_eval(request.GET['cart'])
+    time = request.GET['time']
+    print(cart)
+
+    # go through cart
+    for item in cart:
+
+        print(item)
+        # keep the values of the item object
+        obj = item["object"]
+        name = item['name']
+        amount = item['amount']
+
+        # document the purchase in DB
+        db.add_purchase(obj, name, amount, time)
+
+    return HttpResponse(json.dumps("Success"), content_type = "application/json")
+
+
+def cancel(request):
+    """
+        This returns cancel.
+    """
+
+    return HttpResponse(json.dumps("Cancel"), content_type = "application/json")
+
+
 def purchase(request):
     """
         This purchase method is to connect to stripe and make the purchase.
     """
 
-    # get the data
-    # obj = request.POST['object']
-    # name = request.POST['name']
-    # amount = request.POST['amount']
-
+    # get the data from the request and keep it as a list
     data = ast.literal_eval(request.POST['data'])
 
     # get all products
@@ -224,7 +285,6 @@ def purchase(request):
             # skip
             continue
 
-        print("here")
         # get the id of the product
         product_id = db.object_by_name(obj, name)[0]
         product_name = f"{product_id}:{obj}"
@@ -258,12 +318,16 @@ def purchase(request):
         # make the purchase
         try:
 
+            # keep current time
+            current_time = datetime.datetime.now()
+
+            # open a session
             checkout_session = stripe.checkout.Session.create(
                 
                 line_items=cart_items,
                 mode='payment',
-                success_url=YOUR_DOMAIN + '/success.html',
-                cancel_url=YOUR_DOMAIN + '/cancel.html'
+                success_url=f"{YOUR_DOMAIN}/success?cart={data}&time={current_time}",
+                cancel_url=f"{YOUR_DOMAIN}/cancel/"
 
             )
 
@@ -315,17 +379,17 @@ def create_product(request):
 
     try:
 
-        # create the product
-        db.add_product(obj, name, price, description, tags, images)
-
-        # get new id
-        product_id, name, price, description, tags, images = db.object_by_name(obj, name)
-
         # define a product name in the stripe store
         product_name = f"{product_id}:{obj}"
 
         # create product in stripe
         create_stripe_product(product_name, name, price)
+
+        # create the product
+        db.add_product(obj, name, price, description, tags, images)
+
+        # get new id
+        product_id, name, price, description, tags, images = db.object_by_name(obj, name)
 
         return HttpResponse(json.dumps(f"Successfully created {product_name}."), content_type="application/json")
 
@@ -379,3 +443,26 @@ def set_story(request):
     except:
 
         return HttpResponse(json.dumps("Error: can not reach story file."))
+
+
+def get_purchase(request):
+    """
+        This function returns the purchases.
+    """
+
+    # get the data from the DB
+    rows = db.get_purchase()
+    print(rows)
+
+    final_rows = []
+
+    # go through rows
+    for row in rows:
+
+        # unpack the row
+        row_id, obj, name, amount, time = row
+
+        # append the new object
+        final_rows.append({"id": row_id, "object": obj, "name": name, "amount": amount, "time": time})
+
+    return HttpResponse(json.dumps(final_rows), content_type = "application/json")

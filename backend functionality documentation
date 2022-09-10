@@ -32,13 +32,18 @@ tags: the tags of the product.
 images: images link to the product divided by ",".
 
 
-### CHECKOUT ###
+### SHOP ###
 
+CHECKOUT:
 In order to execute checkout you will need to do the following:
 http://host:port/purchase/
 
 The method of the request will be POST and it will contain the following values:
 data: a list of products to be checked out (or an array in JS) that looks like the following: [{object: <objectType>, name: <productName>, amount: <amount>}]
+
+GETTING PURCHASE HISTORY:
+In order to recieve the purchase history you will need to do the following:
+http://host:port/get_purchase/
 
 
 ### STORY ###
@@ -53,3 +58,13 @@ story: a string that will be the new story.
 GET OUR STORY:
 In order to get the story you will need to do the following:
 http://host:port/get_story/
+
+
+### MAIL ###
+
+In order to send a mail (such as contact us), do the following:
+http://host:port/sendmail?fullname=<fullName>&phone=<phone>&email=<clientEmail>&content=<content>
+<fullname> is the full name from the form.
+<phone> is the phone number of the client from the form.
+<clientEmail> is the client's email to get back to.
+<content> is the mail content.
