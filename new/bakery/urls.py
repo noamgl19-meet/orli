@@ -15,18 +15,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from . import views
+from . import views, story_views, purchase_views, mail_views, managment_views
 
 urlpatterns = [
     path('', views.index, name = 'index'),
-    path('objects/', views.objects, name = 'objects'),
-    path('manage/', views.manage, name = 'manage'),
-    path('purchase/', views.purchase, name = 'purchase'),
-    path('create_product/', views.create_product, name = 'create_product'),
-    path('sendmail/', views.sendmail, name = 'sendmail'),
-    path('get_story/', views.get_story, name = 'get_story'),
-    path('set_story/', views.set_story, name = 'set_story'),
-    path('success/', views.success, name = 'success'),
-    path('cancel/', views.cancel, name = 'cancel'),
-    path('get_purchase/', views.get_purchase, name = 'get_purchase')
+    path('objects/', managment_views.objects, name = 'objects'),
+    path('manage/', managment_views.manage, name = 'manage'),
+    path('purchase/', purchase_views.purchase, name = 'purchase'),
+    path('create_product/', managment_views.create_product, name = 'create_product'),
+    path('sendmail/', mail_views.sendmail, name = 'sendmail'),
+    path('get_story/', story_views.get_story, name = 'get_story'),
+    path('set_story/', story_views.set_story, name = 'set_story'),
+    path('success/', purchase_views.success, name = 'success'),
+    path('cancel/', purchase_views.cancel, name = 'cancel'),
+    path('get_purchase/', purchase_views.get_purchase, name = 'get_purchase')
 ]
