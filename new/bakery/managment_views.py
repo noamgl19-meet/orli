@@ -137,12 +137,16 @@ def create_product(request):
         return HttpResponse(template.render(context,request))
 
     # get form data
-    obj = request.POST.get('object')
-    name = request.POST.get('name')
-    price = request.POST.get('price')
-    description = request.POST.get('description')
-    tags = request.POST.get('tags')
-    images = request.POST.get('images')
+
+    body_unicode = request.body.decode('utf-8')
+    body = json.loads(body_unicode)
+
+    obj = body['object']
+    name = body['name']
+    price = body['price']
+    description = body['description']
+    tags = body['tags']
+    images = body['images']
 
     # check if the object is in the valud objects list
     if obj not in VALID_OBJECTS:
