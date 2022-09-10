@@ -40,6 +40,7 @@ http://host:port/purchase/
 The method of the request will be POST and it will contain the following values:
 data: a list of products to be checked out (or an array in JS) that looks like the following: [{object: <objectType>, name: <productName>, amount: <amount>}]
 
+
 ### STORY ###
 
 CHANGE STORY:
