@@ -134,7 +134,9 @@ def purchase(request):
     """
 
     # get the data from the request and keep it as a list
-    data = ast.literal_eval(request.POST.get('data'))
+    body_unicode = request.body.decode('utf-8')
+    body = json.loads(body_unicode)
+    data = ast.literal_eval(body['data'])
 
     # get all products
     all_products = stripe.Product.list()["data"]

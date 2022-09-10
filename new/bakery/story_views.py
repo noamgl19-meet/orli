@@ -30,7 +30,9 @@ def set_story(request):
     try:
 
         # get the data
-        story = request.POST.get('story')
+        body_unicode = request.body.decode('utf-8')
+        body = json.loads(body_unicode)
+        story = body['story']
 
     except:
 

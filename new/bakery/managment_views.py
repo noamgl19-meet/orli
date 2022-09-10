@@ -137,7 +137,6 @@ def create_product(request):
         return HttpResponse(template.render(context,request))
 
     # get form data
-
     body_unicode = request.body.decode('utf-8')
     body = json.loads(body_unicode)
 
