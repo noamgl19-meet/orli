@@ -23,5 +23,7 @@ urlpatterns = [
     path('manage/', views.manage, name = 'manage'),
     path('purchase/', views.purchase, name = 'purchase'),
     path('create_product/', views.create_product, name = 'create_product'),
-    path('sendmail/', views.sendmail, name = 'sendmail')
+    path('sendmail/', views.sendmail, name = 'sendmail'),
+    path('get_story/', views.get_story, name = 'get_story'),
+    path('set_story/', views.set_story, name = 'set_story')
 ]

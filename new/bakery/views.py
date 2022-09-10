@@ -16,6 +16,7 @@ VALID_ACTIONS = ['delete', 'update']
 VALID_FIELDS = ['id', 'name', 'price', 'description', 'tages', 'images']
 VALID_CART_ACTIONS = ['add', 'remove']
 CURRENCY = "ILS"
+STORY_FILE = "./bakery/ourStory"
 
 # stripe config
 YOUR_DOMAIN = "http://localhost:8000"
@@ -95,11 +96,7 @@ def objects(request):
     # check if the object is in the valud objects list
     if obj not in VALID_OBJECTS:
 
-        return {
-
-            'message': f"Error: 'object' argument is required and has to be on of: {VALID_OBJECTS}."
-
-        }
+        return HttpResponse(json.dumps(f"Error: 'object' argument is required and has to be on of: {VALID_OBJECTS}."), content_type="application/json")
 
     # if tag does not exist
     if not tag:
@@ -176,19 +173,11 @@ def manage(request):
 
         db.update_product(obj, product_id, "price", price)
 
-        data = json.dumps({
-
-            "message": "Success"
-
-        })
+        data = json.dumps("Success")
 
     else:
 
-        data = json.dumps({
-
-            "message": f"Error: 'action' attribute is required and has to be one of: {VALID_ACTIONS}."
-
-        })
+        data = json.dumps(f"Error: 'action' attribute is required and has to be one of: {VALID_ACTIONS}.")
 
     # return the data
     return HttpResponse(data, content_type="application/json")
@@ -331,11 +320,7 @@ def create_product(request):
         # create product in stripe
         create_stripe_product(product_name, name, price)
 
-        return HttpResponse(json.dumps({
-
-            'message': f"Successfully created {product_name}."
-
-        }), content_type="application/json")
+        return HttpResponse(json.dumps(f"Successfully created {product_name}."), content_type="application/json")
 
     except:
 
@@ -344,3 +329,46 @@ def create_product(request):
             'message': "Error."
 
         }), content_type="application/json")
+
+
+def get_story(request):
+    """
+        This function returns the story.
+    """
+
+    # open story file for reading
+    with open(STORY_FILE, "r") as story_file:
+
+        story = story_file.read()
+
+    # return the story
+    return HttpResponse(json.dumps(story), content_type = "application/json")
+
+
+def set_story(request):
+    """
+        This function sets the story to the new one.
+    """
+
+    try:
+
+        # get the data
+        story = request.GET['story']
+
+    except:
+
+        return HttpResponse(json.dumps("Error: argument 'story' is required."))
+
+    try:
+
+        # open story file for writing
+        with open(STORY_FILE, "w") as story_file:
+
+            # override the story file
+            story_file.write(story)
+
+        return HttpResponse(json.dumps("Success"))
+
+    except:
+
+        return HttpResponse(json.dumps("Error: can not reach story file."))
