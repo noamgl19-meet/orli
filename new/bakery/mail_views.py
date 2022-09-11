@@ -41,10 +41,12 @@ def sendmail(request):
     """
 
     # get data
-    fullname = request.GET['fullname']
-    phone = request.GET['phone']
-    email = request.GET['email']
-    content = str(email) + "\n" + str(request.GET['content'])
+    body_unicode = request.body.decode('utf-8')
+    body = json.loads(body_unicode)
+    fullname = body['fullname']
+    phone = body['phone']
+    email = body['email']
+    content = str(email) + "\n" + str(body['content'])
 
     subject = f"{fullname} - {phone}"
 

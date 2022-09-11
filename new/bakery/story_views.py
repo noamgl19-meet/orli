@@ -17,9 +17,19 @@ def get_story(request):
     with open(STORY_FILE, "r") as story_file:
 
         story = story_file.read()
+    
+    content = story.split("###")[0]
+    images = story.split("###")[1]
+
+    data = {
+
+        "story": content,
+        "images": images
+
+    }
 
     # return the story
-    return HttpResponse(json.dumps(story), content_type = "application/json")
+    return HttpResponse(json.dumps(data), content_type = "application/json")
 
 
 def set_story(request):
@@ -33,6 +43,7 @@ def set_story(request):
         body_unicode = request.body.decode('utf-8')
         body = json.loads(body_unicode)
         story = body['story']
+        images = body['images']
 
     except:
 
@@ -44,7 +55,7 @@ def set_story(request):
         with open(STORY_FILE, "w") as story_file:
 
             # override the story file
-            story_file.write(story)
+            story_file.write(story + "\n###" + str(images))
 
         return HttpResponse(json.dumps("Success"))
 

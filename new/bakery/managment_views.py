@@ -19,8 +19,10 @@ def objects(request):
     """
 
     # get the data
-    tag = request.GET['tags']
-    obj = request.GET['object']
+    body_unicode = request.body.decode('utf-8')
+    body = json.loads(body_unicode)
+    tag = body['tags']
+    obj = body['object']
 
     # check if the object is in the valud objects list
     if obj not in VALID_OBJECTS:
@@ -62,15 +64,17 @@ def manage(request):
     """
 
     # get the data
-    obj = request.GET['object']
-    action = request.GET['action']
-    product_id = request.GET['id']
+    body_unicode = request.body.decode('utf-8')
+    body = json.loads(body_unicode)
+    obj = body['object']
+    action = body['action']
+    product_id = body['id']
 
     product_name = f"{product_id}:{obj}"
 
     try:
 
-        price = request.GET['price']
+        price = body['price']
 
     except:
 

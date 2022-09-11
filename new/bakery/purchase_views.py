@@ -101,8 +101,10 @@ def success(request):
     """
 
     # get data
-    cart = ast.literal_eval(request.GET['cart'])
-    time = request.GET['time']
+    body_unicode = request.body.decode('utf-8')
+    body = json.loads(body_unicode)
+    cart = ast.literal_eval(body['cart'])
+    time = body['time']
     print(cart)
 
     # go through cart
