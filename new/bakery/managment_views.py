@@ -167,7 +167,6 @@ def create_product(request):
 
     try:
 
-
         # create the product
         db.add_product(obj, name, price, description, tags, images)
 

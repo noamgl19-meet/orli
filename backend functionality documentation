@@ -54,6 +54,7 @@ http://host:port/set_story/
 
 the method of the request will be POST and it will contain the following values:
 story: a string that will be the new story.
+images: a string that will be the image of our story.
 
 GET OUR STORY:
 In order to get the story you will need to do the following:
