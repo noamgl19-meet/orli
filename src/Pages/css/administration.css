@@ -1,0 +1,237 @@
+/* The Modal (background) */
+.modal-admin {
+    display: block; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    padding-top: 60px;
+}
+
+.first-form {
+    width: 93%;
+}
+
+#id01, #id04, #id05  {
+    display: none;
+}
+
+/* Modal Content/Box */
+.modal-content-admin {
+    background-color: #fefefe;
+    margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+    border: 1px solid #888;
+    width: 40%; /* Could be more or less, depending on screen size */
+    border-radius: 30px;
+}
+
+/* Set a style for all buttons */
+.button-admin {
+    background-color: #d89f9f;
+    color: white;
+    padding: 14px 20px;
+    margin: 15px 0;
+    border: none;
+    cursor: pointer;
+    width: 80%;
+    border-radius: 25px;
+    margin-left: 6%;
+    direction: rtl;
+}
+
+.button-admin:hover {
+    opacity: 0.8;
+}
+
+.container-admin {
+    padding: 16px;
+    width: 95%;
+}
+
+.h5-admin {
+    direction: rtl;
+    margin: 60px 35px 30px 0px;
+}
+
+
+/* New product css */
+.new-product-container {
+    display: none;
+    align-items: center;
+}
+
+.content {
+    display: flex;
+    flex-direction: row;
+    margin: 70px 0px 0px 25%;
+}
+
+
+/* Picture Upload */
+.img-of-product{
+    margin-right: -400px;
+    top: 0;
+    left: 0;
+}
+
+.add {
+    width: 40%;
+    border: 2px solid black;
+    padding: 115px;
+    border-radius: 15px;
+    margin-top: 10%;
+    cursor: pointer;
+}
+
+.input-file {
+    display: none;
+}
+
+.uploaded-image {
+    padding: 50px;
+    cursor: pointer;
+    width: 350px;
+    margin-top: 20%;
+    border-right: 1px solid #f4ecec;
+    margin-right: 20px;
+}
+
+/* Arrows */
+.prev, .next {
+    border-radius: 50px;
+    width: 5%;
+    position: absolute;
+    display: none;
+}
+
+.prev {
+    left: 0;
+    top: 50%; 
+}
+
+.next {
+    right: 7%;
+    top: 50%;
+}
+
+.prev:hover, .next:hover {
+    background-color: #a3a1a0;
+}
+
+/* Description Upload */
+.description {
+    background-color: #f6f3f1;
+    direction: rtl;
+    width: 30%;
+    padding: 40px;
+    height: 430px;
+    font-size: small;
+}
+
+.title-desc {
+    font-family: 'Heebo-Bold';
+    color: #4e1800;
+    font-size: 30px;
+    font-weight: 550;
+}
+
+.description-desc {
+    margin-top: 15%;
+}
+
+.alergic-desc {
+    display: flex;
+    flex-direction: row;
+}
+
+.alergic {
+    font-family: 'Heebo-Bold';
+    font-weight: 600;
+    font-size: 110%;
+    margin: auto;
+    margin-right: 0px;
+    margin-left: 0px;
+    margin-top: 0px;
+}
+
+.alergic-data {
+    margin: auto;
+    margin-right: 1%;
+    margin-top: 1%;
+    font-size: 85%;
+}
+
+.price-desc {
+    display: flex;
+    flex-direction: row;
+    margin-top: 20%;
+}
+
+.price {
+    font-size: 200%;
+    margin-right: 2px;
+    line-height: 1.2;
+    font-family: revert;
+}
+
+/* Our story */
+
+.our-story {
+    display: none;
+}
+
+.img-of-about {
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.add-frame {
+    width: 100%;
+    border: 2px solid black;
+    border-radius: 15px;
+    cursor: pointer;
+}
+
+.add-about {
+    width: 5%;
+    margin-left: 45%;
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
+
+.uploaded-image-about {
+    height: 100px; 
+    width: 100%;  
+}
+
+.about {
+    direction: rtl;
+    padding: 10% 20% 10% 20%;
+}
+
+.about-title {
+    font-size: 175%;
+    font-weight: 500;
+    line-height: 1.1;
+}
+
+/* Buttons */
+
+.save-btn-space {
+    text-align: center;
+}
+
+.save-changes-btn {
+    border-radius: 10px;
+    padding: 5px 10px 5px 10px;
+    direction: rtl;
+}
+
+.save-changes-btn:hover {
+    background-color: #ecdddd91;
+}

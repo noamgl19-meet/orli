@@ -1,0 +1,39 @@
+.footer {
+    flex-shrink: 0;
+    direction: rtl;
+    margin: auto;
+    width: 100%;
+    align-content: center;
+
+    color: #9a3a3a;
+    background: #ecdddd91;
+    height: 120px;
+}
+
+.bottom-menu {
+    width: fit-content;
+    margin: auto;
+    padding: 15px;
+}
+
+.icons {
+    width: fit-content;
+    margin: auto;
+}
+
+.icon-link {
+    padding: 0px 5px 0px 5px;
+}
+
+.footfooter {
+    margin: auto;
+    width: inherit;
+
+    color: #d5c1c1ba;
+    background-color: #000;
+    height: fit-content;
+    text-align: center;
+    padding: 7px;
+    font-size: small;
+    margin-top: 10px;
+}

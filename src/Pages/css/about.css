@@ -1,0 +1,16 @@
+.banner {
+    height: 100px;
+    width: 100%;
+}
+
+.about {
+    direction: rtl;
+    padding: 10% 20% 10% 20%;
+    color: #4e1800;
+}
+
+.about-title {
+    font-size: 175%;
+    font-weight: 500;
+    line-height: 1.1;
+}

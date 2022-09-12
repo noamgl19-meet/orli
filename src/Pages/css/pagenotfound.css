@@ -1,0 +1,21 @@
+.page-not-found {
+    direction: rtl;
+    text-align: center;
+    color: #9a3a3a;
+    margin: 15% 0% 0% 0%;
+    font-size: 12px;
+    font-family: Heebo-Regular, Arial;
+}
+
+a {
+    text-decoration: none;
+}
+
+.aa {
+    color: #9a3a3a;
+    text-decoration: none;
+}
+
+.aa:hover {
+    color: #786f6f;
+}

@@ -1,0 +1,153 @@
+/* Navbar */
+.nav-bar {
+    color: #9a3a3a;
+    background: #ecdddd91;
+    padding: 10px;
+    font-family: Heebo-Regular, Arial;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+}
+
+.nav-right {
+    direction: rtl;
+}
+
+.nav-content {
+    direction: ltr;
+}
+
+/* Content of nav bar */
+.logo {
+    width: 100%;
+}
+
+.name {
+    direction: ltr;
+    color: #9a3a3a;
+    padding-top: var(--bs-navbar-brand-padding-y);
+    padding-bottom: var(--bs-navbar-brand-padding-y);
+    margin-right: var(--bs-navbar-brand-margin-end);
+    font-size: var(--bs-navbar-brand-font-size);
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.name:hover {
+    color: #786f6f;
+}
+
+.menu {
+    margin-left: 10%;
+}
+
+ul {
+    direction: rtl;
+    display: flex;
+    flex-direction: row;
+    list-style-type: none;
+    font-size: small;
+}
+
+li {
+    padding: 0px 15px 0px 0px;
+    width: max-content;
+}
+
+a {
+    color: inherit;
+}
+
+.aa {
+    color: inherit;
+}
+
+.aa:hover {
+    color: #786f6f;
+}
+
+.aaa {
+    width: 15%;
+    margin-right: 10%;
+}
+
+
+/* Search */
+form {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.search-box {
+    width: 400px;
+    display: block;
+    direction: rtl;
+}
+
+.search-button{
+    border: transparent;
+    background: inherit;
+}
+
+
+/* Side menu */
+
+.sidenav {
+    height: 98%;
+    width: 20%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    background-color: #000000c4;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+    text-align: right;
+}
+  
+.sidenav a {
+    padding: 8px 15px 8px 8px;
+    text-decoration: none;
+    font-size: 80%;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+  
+.sidenav a:hover {
+    color: #f1f1f1;
+}
+.sidenav-img {
+    margin-right: -20%;
+} 
+
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    left: 5%;
+    font-size: 36px;
+    margin-right: 50px;
+}
+
+.openbtn {
+    border: none;
+    padding: 0px;
+}
+
+.closebtn {
+    cursor: pointer;
+}
+  
+@media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+}
+
+@media screen and (max-width: 700px) {
+    .sidenav {
+        padding-top: 15px;
+        width: 30%;
+    }
+}
+

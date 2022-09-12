@@ -1,0 +1,130 @@
+.contact {
+    padding: 5% 20% 15% 20%;
+    direction: rtl;
+}
+
+.info {
+    text-align: center;
+    color: #4e1800;
+    padding-bottom: 10%;
+}
+
+.information {
+    font-size: 85%;
+    margin-left: 2%;
+    margin-top: 3%;
+}
+
+.frame {
+    background-color: #e1dad6;
+    text-align: center;
+    color: #4e1800;
+    box-shadow: 3px 5px #c7c7c742;
+}
+
+.title-contact {
+    font-family: 'Heebo-Bold';
+    font-size: 250%;
+    font-weight: 500;
+    line-height: 1.1;
+    padding-top: 3%;
+}
+
+.container-contact {
+    margin-right: 10%;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: row;
+}
+
+.input-contact {
+    margin-left: 2%;
+    width: 90%;
+    border: none;
+}
+
+.content {
+    width: 98%;
+    border: none;
+    margin-bottom: 5%;
+    margin-top: 5%;
+    font-size: 80%;
+    height: 30%;
+}
+
+.subimitation-contact {
+    margin-bottom: 5%;
+}   
+
+.button-contact {
+    border: none;
+    color: #e1dad6;
+    background-color: #4e1800;
+    font-size: 80%;
+    padding: 5px 20px 5px 20px;
+}
+
+.form-contact {
+    display: flex;
+    flex-direction: row-reverse;
+    margin-left: 10%;
+}
+
+@media only screen and (max-width: 700px) {
+    .user-info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .input-contact {
+        margin-left: 2%;
+        width: 70%;
+        border: none;
+        margin-top: 5%;
+    }
+
+    .content {
+        width: 70%;
+        border: none;
+        margin-bottom: 5%;
+        margin-top: 5%;
+        font-size: 80%;
+        height: 30%;
+        margin-right: 14%;
+    }
+
+    .button-contact {
+        border: none;
+        color: #e1dad6;
+        background-color: #4e1800;
+        font-size: 65%;
+        padding: 5px 20px 5px 20px;
+        margin-top: 5%;
+        margin-bottom: 5%;
+    }
+
+    .title-contact {
+        font-family: 'Heebo-Bold';
+        font-size: 175%;
+        font-weight: 500;
+        line-height: 1.1;
+        padding-top: 3%;
+    }
+
+    .information {
+        font-size: 60%;
+        margin-left: 2%;
+        margin-top: 3%;
+    }
+
+    .frame {
+        background-color: #e1dad6;
+        text-align: center;
+        color: #4e1800;
+        box-shadow: 3px 5px #c7c7c742;
+        width: max-content;
+    }
+}

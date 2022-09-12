@@ -1,0 +1,63 @@
+/* Banner */
+.bakery-banner-wrapper {
+    margin-left: 3%;
+    margin-right: 3%;
+    margin-top: 2%;
+}
+
+.bakery-banner {
+    height: 250px;
+    width: 100%;
+}
+
+
+
+@media only screen and (max-width: 700px) {
+    .bakery-banner {
+        height: 100px;
+    }
+}
+
+/* Links */
+.link-wrapper {
+    text-align: center;
+    align-items: center;
+
+    margin-top: 10%;
+    margin-right: 20%;
+    margin-left: 20%;
+
+    color: #4e1800;
+    border-bottom: 1px solid #d1caca;
+    direction: rtl;
+}
+
+.links {
+    padding: 20px;
+}
+
+.link {
+    background-color: transparent;
+    color: inherit;
+    cursor: pointer;
+    width: max-content;
+    border: 0;
+    padding: 5px 10px 5px 10px;
+    font-size: 80%;
+}
+
+.link:hover {
+    background-color: #4e1800;
+    color: white;
+}
+
+.clicked-link {
+    background-color: #4e1800;
+    color: white;
+}
+
+/* Products */
+/* .products {
+
+}
+ */
