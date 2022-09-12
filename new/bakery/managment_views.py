@@ -42,8 +42,8 @@ def objects(request):
     for obj_item in objects:
 
         # unpack the object
-        id, name, price, description, tags, images = obj_item
-        obj_dict = {"id": id, "name": name, "price": price, "description": description, "tags": tags, "images": images}
+        id, name, price, description, tags, images, allergic = obj_item
+        obj_dict = {"id": id, "name": name, "price": price, "description": description, "tags": tags, "images": images, "allergic": allergic, "object": obj}
 
         # insert a new object to the final objects list
         final_objects.append(obj_dict)
@@ -150,6 +150,7 @@ def create_product(request):
     description = body['description']
     tags = body['tags']
     images = body['images']
+    allergic = body['allergic']
 
     # check if the object is in the valud objects list
     if obj not in VALID_OBJECTS:
@@ -168,10 +169,10 @@ def create_product(request):
     try:
 
         # create the product
-        db.add_product(obj, name, price, description, tags, images)
+        db.add_product(obj, name, price, description, tags, images, allergic)
 
         # get new id
-        product_id, name, price, description, tags, images = db.object_by_name(obj, name)
+        product_id, name, price, description, tags, images, allergic = db.object_by_name(obj, name)
 
         # define a product name in the stripe store
         product_name = f"{product_id}:{obj}"
@@ -188,3 +189,47 @@ def create_product(request):
             'message': "Error."
 
         }), content_type="application/json")
+
+
+def search(request):
+    """
+        Returns a list of all items with the name.
+    """
+
+    # get the requested name
+    body_unicode = request.body.decode('utf-8')
+    body = json.loads(body_unicode)
+
+    # go through valid objects
+    for obj in VALID_OBJECTS:
+
+        # search
+        searched_item = db.object_like_name(obj, search_name)
+
+        # check if returned None
+        if searched_item != None:
+
+            break
+
+    # if nothing found
+    if searched_item == None:
+
+        return HttpResponse(json.dumps("Nothing found."), content_type="application/json")
+    
+    # unpack and make a return object
+    id, name, price, description, tags, images, allergic = searched_item
+
+    return_object = {
+
+        "id": id,
+        "name": name,
+        "price": price,
+        "description": description,
+        "tags": tags,
+        "images": images,
+        "allergic": allergic,
+        "object": obj
+
+    }
+    
+    return HttpResponse(json.dumps(return_object), content_type="application/json")

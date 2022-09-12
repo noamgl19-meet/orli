@@ -107,6 +107,29 @@ def object_by_name(obj, name):
     return result
 
 
+def object_like_name(obj, name):
+    """
+        Returns an object containing that name.
+    """
+
+    # create a connection
+    conn, cur = connection()
+
+    # query
+    query = f'select * from {obj} where name like "%{name}%"'
+
+    # execute the query
+    cur.execute(query)
+
+    # keep the answer
+    result = cur.fetchone()
+
+    # close the connection
+    close_connection(conn, cur)
+
+    return result
+
+
 def delete_product(obj, product_id):
     """
         This function takes an object type and id and deletes it.
@@ -145,7 +168,7 @@ def update_product(obj, product_id, field, value):
     close_connection(conn, cur)
 
 
-def add_product(obj, name, price, description, tags, images):
+def add_product(obj, name, price, description, tags, images, allergic):
     """
         This function creates a product object in the DB.
     """
@@ -154,7 +177,7 @@ def add_product(obj, name, price, description, tags, images):
     conn, cur = connection()
 
     # query
-    query = f'insert into {obj} (name, price, description, tags, images) values ("{name}", "{price}", "{description}", "{tags}", "{images}")'
+    query = f'insert into {obj} (name, price, description, tags, images, allergic) values ("{name}", "{price}", "{description}", "{tags}", "{images}", "{allergic}")'
 
     # execute the query
     cur.execute(query)

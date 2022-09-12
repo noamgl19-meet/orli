@@ -16,13 +16,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from . import views, story_views, purchase_views, mail_views, managment_views
+from django.views.generic import TemplateView
 
 urlpatterns = [
-    path('', views.index, name = 'index'),
+    path('', TemplateView.as_view(template_name='index.html')),
     path('objects/', managment_views.objects, name = 'objects'),
     path('manage/', managment_views.manage, name = 'manage'),
     path('purchase/', purchase_views.purchase, name = 'purchase'),
     path('create_product/', managment_views.create_product, name = 'create_product'),
+    path('search/', managment_views.search, name = 'search'),
     path('sendmail/', mail_views.sendmail, name = 'sendmail'),
     path('get_story/', story_views.get_story, name = 'get_story'),
     path('set_story/', story_views.set_story, name = 'set_story'),
