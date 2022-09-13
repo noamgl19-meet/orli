@@ -25,6 +25,7 @@ urlpatterns = [
     path('purchase/', purchase_views.purchase, name = 'purchase'),
     path('create_product/', managment_views.create_product, name = 'create_product'),
     path('search/', managment_views.search, name = 'search'),
+    path('object_id/', managment_views.object_id, name = 'object_id'),
     path('sendmail/', mail_views.sendmail, name = 'sendmail'),
     path('get_story/', story_views.get_story, name = 'get_story'),
     path('set_story/', story_views.set_story, name = 'set_story'),

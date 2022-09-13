@@ -116,7 +116,30 @@ def object_like_name(obj, name):
     conn, cur = connection()
 
     # query
-    query = f'select * from {obj} where name like "%{name}%"'
+    query = f'select * from {obj} where name like "%{name}%" or description like "%{name}%" or allergic like "%{name}%"'
+
+    # execute the query
+    cur.execute(query)
+
+    # keep the answer
+    result = cur.fetchall()
+
+    # close the connection
+    close_connection(conn, cur)
+
+    return result
+
+
+def object_by_id(obj, id):
+    """
+        This returns the object.
+    """
+
+    # create a connection
+    conn, cur = connection()
+
+    # query
+    query = f'select * from {obj} where id = "{id}"'
 
     # execute the query
     cur.execute(query)
@@ -128,7 +151,7 @@ def object_like_name(obj, name):
     close_connection(conn, cur)
 
     return result
-
+    
 
 def delete_product(obj, product_id):
     """

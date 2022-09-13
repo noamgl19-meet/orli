@@ -200,25 +200,76 @@ def search(request):
     body_unicode = request.body.decode('utf-8')
     body = json.loads(body_unicode)
 
+    search = body['string']
+
     # go through valid objects
     for obj in VALID_OBJECTS:
 
         # search
-        searched_item = db.object_like_name(obj, search_name)
+        searched_item = db.object_like_name(obj, search)
 
         # check if returned None
-        if searched_item != None:
+        if searched_item != []:
 
             break
 
     # if nothing found
-    if searched_item == None:
+    if searched_item == []:
 
         return HttpResponse(json.dumps("Nothing found."), content_type="application/json")
     
-    # unpack and make a return object
-    id, name, price, description, tags, images, allergic = searched_item
+    # init return list
+    return_list = []
 
+    # go through searched item
+    for item in searched_item:
+
+        # unpack and make a return object
+        id, name, price, description, tags, images, allergic = item
+
+        return_object = {
+
+            "id": id,
+            "name": name,
+            "price": price,
+            "description": description,
+            "tags": tags,
+            "images": images,
+            "allergic": allergic,
+            "object": obj
+
+        }
+
+        # append return_object to the list
+        return_list.append(return_object)
+    
+    return HttpResponse(json.dumps(return_list), content_type="application/json")
+
+
+def object_id(request):
+    """
+        This returns an object by ID.
+    """
+
+    # get the requested id and object
+    body_unicode = request.body.decode('utf-8')
+    body = json.loads(body_unicode)
+
+    obj = body['object']
+    id = body['id']
+
+    # get the object
+    obj_tuple = db.object_by_id(obj, id)
+
+    # check if empty
+    if obj_tuple == None:
+
+        return HttpResponse(json.dumps("Error: no objects found."), content_type = "application/json")
+
+    # unpack
+    id, name, price, description, tags, images, allergic = obj_tuple
+
+    # return object
     return_object = {
 
         "id": id,
@@ -227,9 +278,9 @@ def search(request):
         "description": description,
         "tags": tags,
         "images": images,
-        "allergic": allergic,
-        "object": obj
+        "allergic": allergic
 
     }
-    
-    return HttpResponse(json.dumps(return_object), content_type="application/json")
+
+    # return this object
+    return HttpResponse(json.dumps(return_object), content_type = "application/json")
