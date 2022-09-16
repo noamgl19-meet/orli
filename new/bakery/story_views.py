@@ -3,9 +3,13 @@ from django.http import HttpResponse
 
 # other imports
 import json
+from .image_handler import from_binary
+import base64
 
 # constants
 STORY_FILE = "./bakery/ourStory"
+IMAGE_BASE = './bakery/images'
+HOST = "https://orlibakeryboutique.herokuapp.com"
 
 
 def get_story(request):
@@ -40,10 +44,11 @@ def set_story(request):
     try:
 
         # get the data
-        body_unicode = request.body.decode('utf-8')
+        body_unicode = request.body.decode("utf-8")
         body = json.loads(body_unicode)
-        story = body['story']
-        images = body['images']
+        story = body["story"]
+        image = body["image"]
+        extension = body["extension"]
 
     except:
 
@@ -51,13 +56,18 @@ def set_story(request):
 
     try:
 
+        # create the image
+        with open(f"{IMAGE_BASE}/story.{extension}", "wb") as image_file:
+
+            image_file.write(image)
+
         # open story file for writing
         with open(STORY_FILE, "w") as story_file:
 
             # override the story file
-            story_file.write(story + "\n###" + str(images))
+            story_file.write(f"{story}\n###{IMAGE_BASE}/story.{extension}")
 
-        return HttpResponse(json.dumps("Success"))
+        return HttpResponse(json.dumps(f"{HOST}{IMAGE_BASE}/story.{extension}"))
 
     except:
 
