@@ -65,7 +65,7 @@ def set_story(request):
         with open(STORY_FILE, "w") as story_file:
 
             # override the story file
-            story_file.write(f"{story}\n###{IMAGE_BASE}/story.{extension}")
+            story_file.write(f"{story}\n###{HOST}{IMAGE_BASE}/story.{extension}")
 
         return HttpResponse(json.dumps(f"{HOST}{IMAGE_BASE}/story.{extension}"))
 

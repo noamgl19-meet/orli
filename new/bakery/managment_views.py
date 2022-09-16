@@ -7,10 +7,13 @@ from django.template import loader
 import json
 from . import db_functions as db
 from . import purchase_views as pr
+import ast
 
 # constants
 VALID_OBJECTS = ['cakes', 'cookies', 'packages']
 VALID_ACTIONS = ['delete', 'update']
+IMAGE_BASE = './bakery/images'
+HOST = "https://orlibakeryboutique.herokuapp.com"
 
 
 def objects(request):
@@ -149,8 +152,9 @@ def create_product(request):
     price = body['price']
     description = body['description']
     tags = body['tags']
-    images = body['images']
+    images = ast.literal_eval(body['images'])
     allergic = body['allergic']
+    extension = body['extension']
 
     # check if the object is in the valud objects list
     if obj not in VALID_OBJECTS:
@@ -168,11 +172,27 @@ def create_product(request):
 
     try:
 
+        # init an image counter
+        image_counter = 0
+        images_list = ""
+
         # handle the image
-        
+        for image in images:
+
+            image_url = f"{IMAGE_BASE}/{obj}/{name}_{image_counter}.{extension}"
+            full_url = HOST + image_url
+
+            # create the image
+            with open(image_url, "wb") as image_file:
+
+                # write the image
+                image_file.write(image)
+
+            # add the image url to the images_list
+            images_list += f",{full_url}"
 
         # create the product
-        db.add_product(obj, name, price, description, tags, images, allergic)
+        db.add_product(obj, name, price, description, tags, images_list, allergic)
 
         # get new id
         product_id, name, price, description, tags, images, allergic = db.object_by_name(obj, name)
