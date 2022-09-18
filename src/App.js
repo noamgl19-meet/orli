@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {  BrowserRouter as Router,  Routes,  Route} from 'react-router-dom';
 
 // Css
@@ -8,12 +8,15 @@ import './App.css';
 import MainBar from './Components/mainbar.js';
 import SiteFooter from './Components/sitefooter.js';
 import Bakery from './Components/bakery.js';
+import Product from './Components/product.js';
+import Search from './Components/search.js';
+import ShoppingBag from './Components/shoppingbag.js';
+
 
 // Pages
 import Home from './Pages/home.js';
 import LogIn from './Pages/login.js';
 import Administration from './Pages/administration.js';
-import Search from './Components/search.js';
 import About from './Pages/about.js';
 import Contact from './Pages/contact.js';
 import NotFound from './Pages/notfound.js';
@@ -28,18 +31,81 @@ function logIn() {
 }
 
 function administration() {
-  let token = true;
-  if(!token)
-  {
-    logIn();
-  }
-  else{
-    return <Administration />;
-  }
+  return <Administration />;
 }
 
-function search(searchData) {
-  return Search(searchData);
+function product() {
+
+  let productId, productObject;
+
+  // Get product info picked by the user
+  if(window.location.pathname==='/product') {
+    const productInfo = decodeURIComponent(window.location.search.substring(4));
+    
+    // Split the data and create an api request
+    if(productInfo!=='') {
+      let productInfoSplit = productInfo.split('&');
+
+      productId = productInfoSplit[0];
+      productObject = productInfoSplit[1].substring(7);
+
+      // Call function 
+      fetchData(productId, productObject);
+    }
+  }
+
+  // This function will called only once
+  async function fetchData(productId, productObject) {
+      // Get the products of the current page from server
+      await fetch("https://orlibakeryboutique.herokuapp.com/object_id/", {
+          method: "POST",
+          headers:{
+          'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({'id' : productId, 'object': productObject})
+      })
+      .then(function(response){ 
+          return response.json();   
+      })
+      .then(function(productData){ 
+          return Product(productData, productObject);
+      });
+  }
+  
+  // In case server is not returning anything
+  return Product('', productObject);
+}
+
+function search() {
+  // Get search phrase inserted bt the user
+  const searchPhrase = decodeURIComponent(window.location.search.substring(3));
+  
+  // Call function
+  searchProduct(searchPhrase);
+
+  // Gets all of the objects containing phrase 
+  async function searchProduct(searchPhrase) {
+      // Get the products of the current page from server
+      await fetch("https://orlibakeryboutique.herokuapp.com/search_object/", {
+          method: "POST",
+          headers:{
+          'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({'string' : String(searchPhrase)})
+      })
+      .then(function(response){ 
+          return response.json();   
+      })
+      .then(function(data){ 
+          return Search(data);
+      });
+  }
+
+  return Search('');
+}
+
+function shoppingBag() {
+  return <ShoppingBag />
 }
 
 function cakesRoute() {
@@ -49,7 +115,6 @@ function cakesRoute() {
 
   // This function will called only once
   async function fetchData(route) {
-
       // Get the products of the current page from server
       await fetch("https://orlibakeryboutique.herokuapp.com/objects/", {
           method: "POST",
@@ -137,88 +202,29 @@ function notFound() {
 }
 
 function App() {
-  // const [cakes, setCakes] = useState();
-  // const [cookies, setCookies] = useState();
-  // const [packages, setPackages] = useState();
-
-  // // Contains all of the products
-  let searchData = [];
-  
-  // // This function will called only once
-  // useEffect(() => {
-  //   // Fetch all data from server
-
-  //   // Get cakes
-  //   // fetch("http://127.0.0.1:8000/objects/", {
-  //   //   method: "POST",
-  //   //   headers:{
-  //   //     'Content-Type': 'application/json'
-  //   //   },
-  //   //   body: JSON.stringify({'object' : 'cakes'})
-  //   // })
-  //   // .then(function(response){ 
-  //   //   return response.json();   
-  //   // })
-  //   // .then(function(data){ 
-  //   //   console.log(data)
-  //   // });
-
-  //   // // Get cookies
-  //   // fetch("http://127.0.0.1:8000/objects/", {
-  //   //   method: "POST",
-  //   //   headers:{
-  //   //     'Content-Type': 'application/json'
-  //   //   },
-  //   //   body: JSON.stringify({'object' : 'cookies'})
-  //   // })
-  //   // .then(function(response){ 
-  //   //   return response.json();   
-  //   // })
-  //   // .then(function(data){ 
-  //   //   console.log(data)
-  //   // });
-
-  //   // // Get packages
-  //   // fetch("http://127.0.0.1:8000/objects/", {
-  //   //   method: "POST",
-  //   //   headers:{
-  //   //     'Content-Type': 'application/json'
-  //   //   },
-  //   //   body: JSON.stringify({'object' : 'packages'})
-  //   // })
-  //   // .then(function(response){ 
-  //   //   return response.json();   
-  //   // })
-  //   // .then(function(data){ 
-  //   //   console.log(data)
-  //   // });
-
-  // }, [])
 
   return (
     <div className='outer-wrapper'>
-        
-        {MainBar(searchData)}
-
+        <MainBar />
         <div className='wrapper'>
           <Router>
             <Routes>
               <Route excat path="/" element={ home() }/>
               <Route path="/login" element={ logIn() } />
               <Route path="/administration" element={ administration() } />
-              <Route path="/search" element={ search(searchData) } />
+              <Route path="/search" element={ search() } />
+              <Route path="/shopping-bag" element={ shoppingBag() } />
               <Route path="/cakes" element={ cakesRoute() } />
               <Route path="/cookies" element={ cookiesRoute() } />
               <Route path="/packages" element={ packagesRoute() } />
+              <Route path="/product" element={ product() } />
               <Route path="/about" element={ about() } />
               <Route path="/contact" element={ contact() } />
               <Route path="*" element={ notFound() } />
             </Routes>
           </Router>
         </div>
-
       <SiteFooter />
-
     </div>
   );
 }

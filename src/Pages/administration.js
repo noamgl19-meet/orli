@@ -8,10 +8,321 @@ export default function Administration() {
   const [files, setFiles] = useState();
   const [picNum, setPicNum] = useState();
 
+  // Get saved data from sessionStorage
+  let token = sessionStorage.getItem('access');
+
+  // Check if user has permissions
+  if(token!=='granted') {
+    // Redirect back to login if user dont have permissions
+    window.location = "/login";
+  }
+
   // Data that being send to server
   var images = [];
   const [object, setObject] = useState();
   const [imageslist, setImagesList] = useState();
+
+
+  // Calls function that create edit page
+  if(object!==undefined && document.getElementById('edit-checker')) {
+    fetchData(object);
+  }
+
+  // This function will called only once
+  async function fetchData(object) {
+      // Get the products of the current page from server
+      await fetch("https://orlibakeryboutique.herokuapp.com/objects/", {
+          method: "POST",
+          headers:{
+          'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({'object' : object, 'tags': ''})
+      })
+      .then(function(response){ 
+          return response.json();   
+      })
+      .then(function(data){ 
+        createObjectResults(data.message)
+      });
+  }
+
+  // Saves changes
+  async function saveChanges(idOfProduct) {
+    // Split id of product
+    idOfProduct = idOfProduct.split('-');
+    
+    // Extract the id number 
+    let objectNumber = idOfProduct[idOfProduct.length - 1];
+    
+    // Get the new price
+    let newPrice = document.getElementById('edit-object-price-' + objectNumber).innerText;
+
+    // Get the id of the product 
+    let id = document.getElementById('edit-object-id-' + objectNumber).innerText;
+
+    // Create data with new price
+    var data = {
+      "action" : "update",
+      "object" : object,
+      "id" : id,
+      "price" : newPrice
+    }
+    
+    // Send data to server
+    await fetch("https://orlibakeryboutique.herokuapp.com/manage/", {
+      method: "POST",
+      headers:{
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    .then(function(response){ 
+      return response.json();   
+    })
+    .then(function(data){ 
+      // console.log(data)
+    });
+  }
+
+  // Delete product
+  async function deleteProduct(idOfProduct) {
+    // Split id of product
+    idOfProduct = idOfProduct.split('-');
+    
+    // Extract the id number 
+    let objectNumber = idOfProduct[idOfProduct.length - 1];
+    
+    // Get the id of the product 
+    let id = document.getElementById('edit-object-id-' + objectNumber).innerText;
+
+    // Remove the product from edit page
+    document.getElementById('edit-object-' + objectNumber).remove();
+    
+    // Create data with new price
+    var data = {
+      "action" : "delete",
+      "object" : object,
+      "id" : id
+    }
+    
+    // Send data to server
+    await fetch("https://orlibakeryboutique.herokuapp.com/manage/", {
+      method: "POST",
+      headers:{
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    .then(function(response){ 
+      return response.json();   
+    })
+    .then(function(data){ 
+      // console.log(data)
+    });
+  }
+
+  // Create all of the results
+  function createObjectResults(searchData) {
+      // Remove edit checker so the function wont run twice
+      document.getElementById('edit-checker').remove();
+
+      // For id tagging
+      let counter = 0;
+      
+      // Go through the result of the object
+      for(let searchResult of searchData) {
+          // ----------
+          
+          // Append edit object to edit space
+          let editObject = document.createElement('div'); 
+                  
+          // Set the settings 
+          editObject.id = 'edit-object-' + counter;
+          editObject.className = 'edit-object';
+
+          // Append the a element
+          document.getElementById('edit-space').appendChild(editObject);
+          
+          // --------------
+
+          // Append edit object wrapper to edit object
+          let editObjectWrapper = document.createElement('div'); 
+                  
+          // Set the settings 
+          editObjectWrapper.id = 'edit-object-wrapper-' + counter;
+          editObjectWrapper.className = 'edit-object-wrapper';
+
+          // Append the a element
+          document.getElementById('edit-object-' + counter).appendChild(editObjectWrapper);
+
+          // --------------
+
+          // Append edit object trash wrapper to edit object wrapper
+          let editObjectTrashWrapper = document.createElement('div'); 
+                  
+          // Set the settings 
+          editObjectTrashWrapper.id = 'edit-object-trash-wrapper-' + counter;
+          editObjectTrashWrapper.className = 'edit-object-trash-wrapper';
+
+          // Append the a element
+          document.getElementById('edit-object-wrapper-' + counter).appendChild(editObjectTrashWrapper);
+
+          // --------------
+
+          // Append edit object trash img to edit object wrapper
+          let editObjectTrashImg = document.createElement('img'); 
+                  
+          // Set the settings 
+          editObjectTrashImg.id = 'edit-object-trash-img-' + counter;
+          editObjectTrashImg.className = 'edit-object-trash-img';
+          editObjectTrashImg.src = './icons/trash-can.png'
+
+          // Append the a element
+          document.getElementById('edit-object-trash-wrapper-' + counter).appendChild(editObjectTrashImg);
+        
+          // Add event listner that transfer to the product page
+          editObjectTrashImg.addEventListener("click", (e) => {deleteProduct(e.target.id)});
+          
+          // --------------
+
+          // Append edit object img wrapper to edit object wrapper
+          let editObjectImgWrapper = document.createElement('div'); 
+                  
+          // Set the settings 
+          editObjectImgWrapper.id = 'edit-object-img-wrapper-' + counter;
+          editObjectImgWrapper.className = 'edit-object-img-wrapper';
+
+          // Append the a element
+          document.getElementById('edit-object-wrapper-' + counter).appendChild(editObjectImgWrapper);
+
+          // --------------
+
+          // Append edit object img to edit object img wrapper
+          let editObjectImg = document.createElement('img'); 
+                  
+          // Set the settings 
+          editObjectImg.id = 'edit-object-img-' + counter;
+          editObjectImg.className = 'edit-object-img';
+          editObjectImg.src = searchResult.images[0];
+
+          // Append the a element
+          document.getElementById('edit-object-img-wrapper-' + counter).appendChild(editObjectImg);
+
+          // --------------
+
+          // Append edit object info to edit object wrapper
+          let editObjectInfo = document.createElement('div'); 
+                  
+          // Set the settings 
+          editObjectInfo.id = 'edit-object-info-' + counter;
+          editObjectInfo.className = 'edit-object-info';
+
+          // Append the a element
+          document.getElementById('edit-object-wrapper-' + counter).appendChild(editObjectInfo);
+
+          // --------------
+
+          // Append edit object title to edit object info
+          let editObjectTitle = document.createElement('p'); 
+                  
+          // Set the settings 
+          editObjectTitle.id = 'edit-object-title-' + counter;
+          editObjectTitle.className = 'edit-object-title';
+          editObjectTitle.innerHTML = searchResult.name;
+
+          // Append the a element
+          document.getElementById('edit-object-info-' + counter).appendChild(editObjectTitle);
+
+          // --------------
+          
+          // Append edit object info price to edit object info
+          let editObjectPriceInfo = document.createElement('div'); 
+              
+          // Set the settings 
+          editObjectPriceInfo.id = 'edit-object-price-info-' + counter;
+          editObjectPriceInfo.className = 'edit-object-price-info';
+
+          // Append the a element
+          document.getElementById('edit-object-info-' + counter).appendChild(editObjectPriceInfo);
+
+          // --------------
+
+          // Append edit object price to edit object price info 
+          let editObjectPrice = document.createElement('h3'); 
+              
+          // Set the settings 
+          editObjectPrice.id = 'edit-object-price-' + counter;
+          editObjectPrice.className = 'edit-object-price';
+          editObjectPrice.contentEditable = 'true';
+          editObjectPrice.innerHTML = searchResult.price;
+        
+          // Append the a element
+          document.getElementById('edit-object-price-info-' + counter).appendChild(editObjectPrice);
+
+          // --------------
+
+          // Append edit object info tag price to edit object info
+          let editObjectPriceTag = document.createElement('span'); 
+              
+          // Set the settings 
+          editObjectPriceTag.id = 'edit-object-price-tag-' + counter;
+          editObjectPriceTag.className = 'edit-object-price-tag';
+          editObjectPriceTag.innerHTML = '₪';
+
+          // Append the a element
+          document.getElementById('edit-object-price-info-' + counter).appendChild(editObjectPriceTag);
+
+          // --------------
+
+          // Append edit object save changes wrapper to edit object info
+          let editObjectSaveChangesWrapper = document.createElement('div'); 
+              
+          // Set the settings 
+          editObjectSaveChangesWrapper.id = 'edit-object-save-changes-wrapper-' + counter;
+          editObjectSaveChangesWrapper.className = 'edit-object-save-changes-wrapper';
+          
+
+          // Append the a element
+          document.getElementById('edit-object-info-' + counter).appendChild(editObjectSaveChangesWrapper);
+
+          // --------------
+
+          // Append edit object save changes wrapper to edit object info
+          let editObjectSaveChangesButton = document.createElement('button'); 
+              
+          // Set the settings 
+          editObjectSaveChangesButton.id = 'edit-object-save-changes-button-' + counter;
+          editObjectSaveChangesButton.className = 'edit-object-save-changes-button';
+          editObjectSaveChangesButton.innerHTML = 'שמור שינויים';
+
+          // Append the a element
+          document.getElementById('edit-object-save-changes-wrapper-' + counter).appendChild(editObjectSaveChangesButton);
+
+          // Add event listner that transfer to the product page
+          editObjectSaveChangesButton.addEventListener("click", (e) => {saveChanges(e.target.id)});
+          
+          // --------------
+          
+          // Append edit object save changes wrapper to edit object info
+          let editObjectId = document.createElement('div'); 
+              
+          // Set the settings 
+          editObjectId.id = 'edit-object-id-' + counter;
+          editObjectId.className = 'edit-object-id';
+          editObjectId.innerHTML = searchResult.id;
+
+          // Append the a element
+          document.getElementById('edit-object-save-changes-wrapper-' + counter).appendChild(editObjectId);
+
+          // Make id be invisible
+          document.getElementById('edit-object-id-' + counter).style.display = 'none';
+
+          // Increase counter by one
+          counter++;
+      }
+  }
+
+  // Functions 
 
   // Show second form
   function handleSubmit0(e) {
@@ -67,8 +378,12 @@ export default function Administration() {
     }
   }
 
+
   // Cancel buttons
   function quit() {
+    // clear session storage
+    sessionStorage.clear();
+
     // Go back to the main page
     window.location = "/";
   }
@@ -99,7 +414,7 @@ export default function Administration() {
   }
 
 
-  // Uploading an image
+  // Uploading an image for create product
   function uploadImage(e) {
     e.preventDefault();
 
@@ -177,9 +492,31 @@ export default function Administration() {
     }
   }
 
+  // Uploading an image for story
   function uploadImageAbout() {
     // Click on the input so the input box will pop up
     document.getElementById("fileAbout").click();
+  }
+
+  async function getAsByteArray(file) {
+    console.log(typeof(new Uint8Array(await readFile(file))));
+    setImagesList(new Uint8Array(await readFile(file)));
+    images.push(new Uint8Array(await readFile(file)));
+    return new Uint8Array(await readFile(file))
+  }
+
+  function readFile(file) {
+    return new Promise((resolve, reject) => {
+      // Create file reader
+      let reader = new FileReader()
+  
+      // Register event listeners
+      reader.addEventListener("loadend", e => resolve(e.target.result))
+      reader.addEventListener("error", reject)
+  
+      // Read file
+      reader.readAsArrayBuffer(file)
+    })
   }
 
   function loadFileAbout(e) {
@@ -200,9 +537,12 @@ export default function Administration() {
       // Uploading the picture and add the class
       output.src = URL.createObjectURL(e.target.files[0]);
 
-       // Saves the url
-      images.push(URL.createObjectURL(e.target.files[0]));
-      setImagesList(images);
+      // const byteFile = getAsByteArray(e.target.files[0]);
+      console.log(images)
+      setImagesList(e.target.files[0]);
+      // Saves the url
+      // images.push(URL.createObjectURL(e.target.files[0]));
+      // setImagesList(images);
 
       output.classList.add("uploaded-image-about");
 
@@ -271,7 +611,11 @@ export default function Administration() {
     output.onclick = uploadImage;
   }
 
+  // Create new product
   async function sendDataNewProduct() {
+    // Disabling the button
+    document.getElementById('send-new-product').disabled = true;
+
     // Get all the data and combine it to a json
     let name, price, description, tags, allergic;
 
@@ -309,15 +653,20 @@ export default function Administration() {
     window.location = "/administration";
   }
 
+  // Create story page
   async function sendStory() {
+    // Disabling the button
+    document.getElementById('send-story').disabled = true;
+
     // Get all the data and combine it to a json
     let story;
 
     story = document.getElementById('story').innerText;
-
+    console.log(imageslist,story)
     var data = {
-      "story" : story ,
-      "images": imageslist
+      "story" : story,
+      "images" : imageslist,
+      "extension" : "png"
     }
 
     await fetch("https://orlibakeryboutique.herokuapp.com/set_story/", {
@@ -423,7 +772,7 @@ export default function Administration() {
           </div>
 
           <div className='save-btn-space'>
-            <button className='save-changes-btn' onClick={sendDataNewProduct}>שמור מוצר</button>
+            <button id='send-new-product' className='save-changes-btn' onClick={sendDataNewProduct}>שמור מוצר</button>
           </div>
         </div>
 
@@ -433,24 +782,14 @@ export default function Administration() {
             <span onClick={backToFirst} className="close" title="Close Modal">&times;</span>
           </div>
 
-          {/* <div className='img-of-about'>
-            <div className='add-frame' id='imageAbout' onClick={uploadImageAbout}>
-              <img id='addAbout' src="./icons/plus.png" alt="AddImage" className="add-about"/>
-              <input id="fileAbout" className='input-file' type="file" accept="image/*" name="image" onChange={loadFileAbout}></input>
-            </div>
+          <div className='title-wrapper'>
+            <h3 className='title'> רשימת המוצרים לעריכה</h3>
+          </div>
 
-            <div className='about'>
-              <p className='about-title'>הeditו</p>
-              
-              <div id = 'story' contenteditable="true">הכנס/י את הסיפור שלנו...</div>
-            </div>
+          <div id='edit-space' className='edit-space'>
 
-            <div className='save-btn-space'>
-              <button className='save-changes-btn' onClick={sendStory}>שמור מוצר</button>
-            </div> */}
-
-          {/* </div> */}
-          
+          </div>
+          <div id='edit-checker'></div>
         </div>
 
         {/* Our story */}
@@ -462,7 +801,7 @@ export default function Administration() {
           <div className='img-of-about'>
             <div className='add-frame' id='imageAbout' onClick={uploadImageAbout}>
               <img id='addAbout' src="./icons/plus.png" alt="AddImage" className="add-about"/>
-              <input id="fileAbout" className='input-file' type="file" accept="image/*" name="image" onChange={loadFileAbout}></input>
+              <input id="fileAbout" className='input-file' type="file" accept="image/jpg, image/jpeg, image/png" name="image" onChange={loadFileAbout}></input>
             </div>
 
             <div className='about'>
@@ -472,7 +811,7 @@ export default function Administration() {
             </div>
 
             <div className='save-btn-space'>
-              <button className='save-changes-btn' onClick={sendStory}>שמור סיפור</button>
+              <button id='send-story' className='save-changes-btn' onClick={sendStory}>שמור סיפור</button>
             </div>
 
           </div>

@@ -1,0 +1,68 @@
+/* Product CSS */
+.product-container {
+    align-items: center;
+}
+
+.content {
+    display: flex;
+    flex-direction: row;
+    margin: 70px 0px 0px 25%;
+}
+
+/* Product info */
+.description-product {
+    background-color: #f6f3f1;
+    direction: rtl;
+    width: 28%;
+    padding: 8% 3% 5% 5%;
+    height: fit-content;
+    font-size: small;
+}
+
+.uploaded-image-product {
+    padding: 50px;
+    width: 350px;
+    margin-top: 20%;
+    border-right: 1px solid #f4ecec;
+    margin-right: 20px;
+}
+
+.title-desc-product {
+    font-family: 'Heebo-Bold';
+    color: #4e1800;
+    font-size: 220%;
+    font-weight: 600;
+}
+
+.alergic-data {
+    margin: auto;
+    margin-right: 1%;
+    margin-top: 1%;
+    font-size: 85%;
+}
+
+.price-product {
+    font-size: 200%;
+    margin-right: 2px;
+    line-height: 1.2;
+    font-family: 'Heebo-Bold';
+    font-weight: 600;
+}
+
+
+.add-to-cart-wrapper {
+    margin-top: 30%;
+}
+
+.add-to-cart {
+    width: 100%;
+    padding: 5%;
+    border: none;
+    border-radius: 5px;
+    background-color: #ecd9d9;
+    font-weight: 600;
+}
+
+.add-to-cart:hover {
+    background-color: #f0e1de91;    
+}

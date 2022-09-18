@@ -129,7 +129,7 @@
     direction: rtl;
     width: 30%;
     padding: 40px;
-    height: 430px;
+    height: fit-content;
     font-size: small;
 }
 
@@ -234,4 +234,164 @@
 
 .save-changes-btn:hover {
     background-color: #ecdddd91;
+}
+
+/* Edit product CSS */
+
+.edit-space {
+    padding: 5%;
+}
+
+.title-wrapper {
+    text-align: center;
+}
+
+.title {
+    color: #4e1800;
+}
+
+.edit-object {
+    direction: rtl;
+    height: fit-content;
+    width: 100%;
+    padding: 5px;
+    border-bottom: 1px solid #f4ececaf;
+    margin-bottom: 1%;
+    color: #4e1800;
+}
+
+.edit-object:hover {
+    background-color: #ecdddd91;
+    color: #31170c;
+}
+
+.edit-object-wrapper {
+    display: flex;
+    flex-direction: row;
+    height: fit-content;
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 2%;
+    direction: rtl;
+    overflow: auto;
+}
+
+.edit-object-img-wrapper {
+    width: -webkit-fill-available;
+}
+
+.edit-object-img {
+    width: 100%;
+    height: -webkit-fill-available;
+    padding: 2%;
+}
+
+.edit-object-info {    
+    display: flex;
+    flex-direction: row;
+    margin-right: 5%;
+    margin-top: 5%;
+    width: -webkit-fill-available;
+    font-size: 130%;
+}
+
+.edit-object-title {
+    margin-left: 20%;
+    color: inherit;
+    font-weight: 500;
+}
+
+.edit-object-price-info {
+    display: flex;
+    flex-direction: row;
+    color: inherit;
+    font-weight: 500;
+}
+
+.edit-object-price {
+    display: flex;
+    flex-direction: row;
+    direction: ltr;
+}
+
+.edit-object-price-tag {
+    margin-right: 2px;
+    line-height: 1.2;
+    font-family: revert;
+    font-size: 120%;
+}
+
+.edit-object-save-changes-wrapper {
+    width: 100%;
+    direction: ltr;
+    margin-right: 5%;
+}
+
+.edit-object-save-changes-button {
+    font-size: 70%;
+}
+
+.edit-object-trash-wrapper {
+    width: 50px;
+    cursor: pointer;
+    margin-top: 4%;
+    margin-left: 2%;
+    margin-right: 2%;
+}
+
+.edit-object-trash-img {
+    width: 100%;
+}
+
+@media screen and (max-width: 730px) {
+    .edit-space {
+        height: 100%;
+        margin-left: 10%;
+        margin-right: 10%;
+        margin-top: 5%;
+        margin-bottom: 10%;
+        border-right: 1px solid #f4ecec;
+        background-color: #f3e7d636;
+    }
+
+    .edit-title {
+        direction: rtl;
+        color: #4e1800;
+        margin-top: 5%;
+        margin-bottom: 5%;
+        margin-right: 5%;
+        font-size: 130%;
+    }
+
+    .edit-object-info {
+        display: flex;
+        flex-direction: row;
+        margin-right: 5%;
+        margin-top: 5%;
+        width: -webkit-fill-available;
+        font-size: 90%;
+    }
+
+    .edit-object-price {
+        display: flex;
+        flex-direction: row;
+        font-size: 100%;
+        margin-top: 10%;
+    }
+}
+
+@media screen and (max-width: 520px) {
+    .edit-space {
+        height: 100%;
+        margin-left: 10%;
+        margin-right: 10%;
+        margin-top: 5%;
+        margin-bottom: 10%;
+        border-right: 1px solid #f4ecec;
+        background-color: #f3e7d636;
+    }
+
+    .edit-object-img-wrapper {
+        width: 50%;
+    }
 }

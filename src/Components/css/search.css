@@ -1,10 +1,12 @@
+/* Search component */
 .search-space {
     height: 100%;
     margin-left: 20%;
     margin-right: 20%;
-    margin-top: 10%;
+    margin-top: 5%;
     margin-bottom: 10%;
     border-right: 1px solid #f4ecec;
+    background-color: #f3e7d636;
 }
 
 .search-title {
@@ -16,9 +18,126 @@
     font-size: 130%;
 }
 
+/* Search object appereance */
+
 .search-object {
-    height: 30%;
+    direction: rtl;
+    height: fit-content;
     width: 100%;
-    padding: 10px;
+    padding: 5px;
     border-bottom: 1px solid #f4ececaf;
+    margin-bottom: 1%;
+    cursor: pointer;
+    color: #4e1800;
+}
+
+.search-object:hover {
+    background-color: #ecdddd91;
+    color: #31170c;
+}
+
+.search-object-wrapper {
+    display: flex;
+    flex-direction: row;
+    height: fit-content;
+    width: 100%;
+    padding: 5px;
+    direction: rtl;
+}
+
+.search-object-img-wrapper {
+    width: -webkit-fill-available;
+}
+
+.search-object-img {
+    width: 100%;
+    height: -webkit-fill-available;
+    padding: 2%;
+}
+
+.search-object-info {    
+    display: flex;
+    flex-direction: row;
+    margin-right: 5%;
+    margin-top: 5%;
+    width: -webkit-fill-available;
+    font-size: 130%;
+}
+
+.search-object-title {
+    margin-left: 20%;
+    color: inherit;
+    font-weight: 500;
+}
+
+.search-object-price-info {
+    display: flex;
+    flex-direction: row;
+    color: inherit;
+    font-weight: 500;
+}
+
+.search-object-price {
+    display: flex;
+    flex-direction: row;
+}
+
+.search-object-price-tag {
+    margin-right: 2px;
+    line-height: 1.2;
+    font-family: revert;
+    font-size: 120%;
+}
+
+@media screen and (max-width: 730px) {
+    .search-space {
+        height: 100%;
+        margin-left: 10%;
+        margin-right: 10%;
+        margin-top: 5%;
+        margin-bottom: 10%;
+        border-right: 1px solid #f4ecec;
+        background-color: #f3e7d636;
+    }
+
+    .search-title {
+        direction: rtl;
+        color: #4e1800;
+        margin-top: 5%;
+        margin-bottom: 5%;
+        margin-right: 5%;
+        font-size: 130%;
+    }
+
+    .search-object-info {
+        display: flex;
+        flex-direction: row;
+        margin-right: 5%;
+        margin-top: 5%;
+        width: -webkit-fill-available;
+        font-size: 90%;
+    }
+
+    .search-object-price {
+        display: flex;
+        flex-direction: row;
+        font-size: 100%;
+        margin-top: 10%;
+    }
+}
+
+@media screen and (max-width: 520px) {
+    .search-space {
+        height: 100%;
+        margin-left: 10%;
+        margin-right: 10%;
+        margin-top: 5%;
+        margin-bottom: 10%;
+        border-right: 1px solid #f4ecec;
+        background-color: #f3e7d636;
+    }
+
+    .search-object-img-wrapper {
+        width: 50%;
+    }
 }

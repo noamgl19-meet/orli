@@ -1,16 +1,15 @@
-/* Banner */
-.bakery-banner-wrapper {
+/* Wrapper */
+.bakery-wrapper {
     margin-left: 3%;
     margin-right: 3%;
     margin-top: 2%;
 }
 
+/* Banner */
 .bakery-banner {
     height: 250px;
     width: 100%;
 }
-
-
 
 @media only screen and (max-width: 700px) {
     .bakery-banner {
@@ -57,7 +56,74 @@
 }
 
 /* Products */
-/* .products {
-
+.products {
+    direction: rtl;
+    text-align: center;
+    font-family: Heebo-Regular, Arial;
 }
- */
+
+.product-frame {
+    width: 25%;
+    margin: 3%;
+    cursor: pointer;
+}
+
+.product-frame:hover {
+    margin-top: 0px;
+    -moz-box-shadow: 0px 0px 4px 1px #d1caca;
+    -webkit-box-shadow: 0px 0px 4px 1px #d1caca;
+    box-shadow: 0px 0px 4px 1px  #d1caca;
+}
+
+
+
+.product-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.product-img {
+    width: -webkit-fill-available;
+}
+
+.product-title {
+    font-size: 125%;
+    color: #4e1800;
+    margin-bottom: 5%;
+    margin-top: 5%;
+}
+
+.product-price {
+    font-family: 'Heebo-Bold';
+    font-size: 110%;
+    font-weight: 600;
+}
+
+/* Adjust for phone */
+
+@media screen and (max-width: 700px) {
+    
+    .link {
+        background-color: transparent;
+        color: inherit;
+        cursor: pointer;
+        width: max-content;
+        border: 0;
+        padding: 5px 0px 5px 5px;
+        font-size: 80%;
+    }
+
+    .product-title {
+        font-size: 70%;
+        color: #4e1800;
+        margin-bottom: 5%;
+        margin-top: 5%;
+    }
+
+    .product-price {
+        font-family: 'Heebo-Bold';
+        font-size: 80%;
+        font-weight: 600;
+    }
+}
