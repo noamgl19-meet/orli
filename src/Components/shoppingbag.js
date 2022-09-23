@@ -18,6 +18,40 @@ export default function ShoppingBag() {
 
     // --------
 
+    // Adjust amount of product from cart
+    function adjustAmount(action, id, product) {
+        // Get te id of the product
+        id = id.split('-');
+        id = id[id.length - 1];
+
+        let oldAmount = parseFloat(document.getElementById('edit-panel-number-' + id).innerText);
+        let oldTotalPriceOfProduct = parseFloat(document.getElementById('cart-content-item-info-price-' + id).innerText.slice(2));
+            
+        if(action==='+') {
+            // Change amount shower
+            document.getElementById('edit-panel-number-' + id).innerText = oldAmount + 1;
+           
+            // Recalculate total price of product
+            document.getElementById('cart-content-item-info-price-' + id).innerText = '₪ ' + Number(((oldTotalPriceOfProduct / oldAmount) * (oldAmount + 1)).toFixed(1));
+        }
+        else {
+            // If amount is more then 1 recalculate if 1 remove completly
+            if(oldAmount>1) { 
+                // Change amount shower
+                document.getElementById('edit-panel-number-' + id).innerText = oldAmount -  1;
+                
+                // Recalculate total price of product
+                document.getElementById('cart-content-item-info-price-' + id).innerText = '₪ ' + Number(((oldTotalPriceOfProduct / oldAmount) * (oldAmount - 1)).toFixed(1));
+            }
+            else {
+                deleteCartProduct(product, id);
+            }
+        }
+
+        // Recalculate total price of cart
+        calcTotalPriceLoad();
+    }
+
     // Calculate total price after load - 7
     function calcTotalPriceLoad(){
         // Get all the items
@@ -46,7 +80,7 @@ export default function ShoppingBag() {
         }
         else{
             // Upload the new total price
-            document.getElementById('total-price').innerHTML = '₪ ' + totalPrice;
+            document.getElementById('total-price').innerHTML = '₪ ' + Number((totalPrice).toFixed(1));
         }
     }
 
@@ -69,7 +103,7 @@ export default function ShoppingBag() {
         
         // Remove the exp from the local storage
         for(let i=0; i<itemsIdObject.length; i++) {
-            if(itemsIdObject[i]!==exp) {
+            if(itemsIdObject[i].split('+')[0]!==exp) {
                 newItemIdObejct.push(itemsIdObject[i]);
             }
         }
@@ -104,7 +138,7 @@ export default function ShoppingBag() {
     }
 
     // Add product to cart list - 4
-    function addProductToCartList(product, counter) {
+    function addProductToCartList(product, amountOfProduct, counter) {
         
         // Append cart item wrapper to cart items wrapper
         let cartItemWrapper = document.createElement('div'); 
@@ -151,7 +185,13 @@ export default function ShoppingBag() {
         // Set the settings
         cartItemInfoPrice.id = 'cart-content-item-info-price-' + counter;
         cartItemInfoPrice.className = 'cart-content-item-info-price';
-        cartItemInfoPrice.innerHTML = '₪ ' + product.price;
+        
+        // If amount of product is undefined it means its equal to 1
+        if(amountOfProduct===undefined) {
+            amountOfProduct = 1;
+        }
+
+        cartItemInfoPrice.innerHTML = '₪ ' + (product.price * parseInt(amountOfProduct));
 
         // Append the a element to the cart items content info wrapper
         document.getElementById('cart-content-item-info-' + counter).appendChild(cartItemInfoPrice);
@@ -195,6 +235,9 @@ export default function ShoppingBag() {
         // Append the a element to the cart items edit panel wrapper
         document.getElementById('edit-panel-' + counter).appendChild(editPanelPlus);
 
+        // Add event listner plus one the amount of product and calculate every thing
+        editPanelPlus.addEventListener("click", (e) => {adjustAmount('+', e.target.id, product)});
+          
         // -----------
 
         // Append minus img to cart item edit panel wrapper
@@ -203,8 +246,15 @@ export default function ShoppingBag() {
         // Set the settings
         editPanelNumber.id = 'edit-panel-number-' + counter;
         editPanelNumber.className = 'edit-panel-number';
-        editPanelNumber.innerHTML = '1';
-        
+
+        // If amount is more then one
+        if(amountOfProduct) {
+            editPanelNumber.innerHTML = amountOfProduct;
+        }
+        else {
+            editPanelNumber.innerHTML = '1';
+        }
+
         // Append the a element to the cart items edit panel wrapper
         document.getElementById('edit-panel-' + counter).appendChild(editPanelNumber);
 
@@ -220,6 +270,10 @@ export default function ShoppingBag() {
         
         // Append the a element to the cart items edit panel wrapper
         document.getElementById('edit-panel-' + counter).appendChild(editPanelMinus);
+
+        // Add event listner minus one the amount of product and calculate every thing
+        editPanelMinus.addEventListener("click", (e) => {adjustAmount('-', e.target.id, product)});
+          
 
         // -----------
 
@@ -247,7 +301,7 @@ export default function ShoppingBag() {
         // Append the a element to the cart item trash can wrapper
         document.getElementById('item-trash-can-wrapper-' + counter).appendChild(trashCan);
 
-        // Add event listner that transfer to the product page
+        // Add event listner that delete product and recalculate every thing
         trashCan.addEventListener("click", (e) => {deleteCartProduct(product, e.target.id)});
           
         // -----------
@@ -255,7 +309,7 @@ export default function ShoppingBag() {
     }
 
     // Get product from server - 3
-    async function fetchProduct(productObject, productId, counter, counterTotal) {
+    async function fetchProduct(productObject, productId, amountOfProduct, counter, counterTotal) {
         // Get the products of the current page from server
         await fetch("https://orlibakeryboutique.herokuapp.com/object_id/", {
             method: "POST",
@@ -269,7 +323,12 @@ export default function ShoppingBag() {
         })
         .then(function(productData){ 
             // Calculate total price
-            totalPrice += parseFloat(productData.price);
+            if(amountOfProduct) {
+                totalPrice += parseFloat(productData.price) * parseInt(amountOfProduct);
+            }
+            else {
+                totalPrice += parseFloat(productData.price);
+            }
             
             // Round the total price
             totalPrice = Number((totalPrice).toFixed(1));
@@ -278,7 +337,7 @@ export default function ShoppingBag() {
             calcTotalPrice(totalPrice, counterTotal)
 
             // Create the product
-            addProductToCartList(productData, counter);
+            addProductToCartList(productData, amountOfProduct, counter);
         });
     }
 
@@ -291,9 +350,10 @@ export default function ShoppingBag() {
             // Split itemidobject
             let object = itemidobject.split(':')[0];
             let id = itemidobject.split(':')[1];
-            
+            let amountOfProduct = itemidobject.split('+')[1];
+
             // Fetch data and create cart content
-            fetchProduct(object, id, counter, itemsIdObject.length - 1);
+            fetchProduct(object, id, amountOfProduct, counter, itemsIdObject.length - 1);
 
             counter++;
         }
@@ -306,46 +366,48 @@ export default function ShoppingBag() {
         // Checks if empty
         if(!cartItems || cartItems===null)
         {
-            // Append shopping basket wrapper to cart content
-            let shoppingBasket = document.createElement('div'); 
-                    
-            // Set the settings
-            shoppingBasket.id = 'shopping-basket';
-            shoppingBasket.className = 'shopping-basket';
+            if(!document.getElementById('shopping-basket')) {
+                // Append shopping basket wrapper to cart content
+                let shoppingBasket = document.createElement('div'); 
+                        
+                // Set the settings
+                shoppingBasket.id = 'shopping-basket';
+                shoppingBasket.className = 'shopping-basket';
 
-            // Append the a element to the cart content
-            document.getElementById('cart-content').appendChild(shoppingBasket);
+                // Append the a element to the cart content
+                document.getElementById('cart-content').appendChild(shoppingBasket);
 
-            // -----------
+                // -----------
 
-            // Append shopping basket img to shopping basket wrapper
-            let shoppingBasketImg = document.createElement('img'); 
-                    
-            // Set the settings
-            shoppingBasketImg.id = 'shopping-basket-img';
-            shoppingBasketImg.className = 'shopping-basket-img';
-            shoppingBasketImg.src = './icons/shopping-basket.png';
+                // Append shopping basket img to shopping basket wrapper
+                let shoppingBasketImg = document.createElement('img'); 
+                        
+                // Set the settings
+                shoppingBasketImg.id = 'shopping-basket-img';
+                shoppingBasketImg.className = 'shopping-basket-img';
+                shoppingBasketImg.src = './icons/shopping-basket.png';
 
-            // Append the a element to the shopping basket wrapper
-            document.getElementById('shopping-basket').appendChild(shoppingBasketImg);
+                // Append the a element to the shopping basket wrapper
+                document.getElementById('shopping-basket').appendChild(shoppingBasketImg);
 
-            // -----------
+                // -----------
 
-            // Append shopping basket title to shopping basket wrapper
-            let shoppingBasketTitle = document.createElement('p'); 
-                    
-            // Set the settings
-            shoppingBasketTitle.id = 'shopping-basket-title';
-            shoppingBasketTitle.className = 'shopping-basket-title';
-            shoppingBasketTitle.innerHTML = 'הסל שלך ריק';
+                // Append shopping basket title to shopping basket wrapper
+                let shoppingBasketTitle = document.createElement('p'); 
+                        
+                // Set the settings
+                shoppingBasketTitle.id = 'shopping-basket-title';
+                shoppingBasketTitle.className = 'shopping-basket-title';
+                shoppingBasketTitle.innerHTML = 'הסל שלך ריק';
 
-            // Append the a element to the shopping basket wrapper
-            document.getElementById('shopping-basket').appendChild(shoppingBasketTitle);
+                // Append the a element to the shopping basket wrapper
+                document.getElementById('shopping-basket').appendChild(shoppingBasketTitle);
 
-            // -----------
+                // -----------
 
-            // Disable pay button
-            document.getElementById('pay-btn').disabled = true;
+                // Disable pay button
+                document.getElementById('pay-btn').disabled = true;
+            }
         }
         else {
             // Add css and html as preperation for items
@@ -395,10 +457,53 @@ export default function ShoppingBag() {
 
     // --------
 
+    async function sendProducts(data) {
+        console.log(data);
+         // Get the products of the current page from server
+         await fetch("https://orlibakeryboutique.herokuapp.com/purchase/", {
+            method: "POST",
+            headers:{
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({'data' : data})
+        })
+        .then(function(response){ 
+            return response.json();   
+        })
+        .then(function(link){ 
+            // Redirect to the payment page
+            window.location.href = link;
+        }).catch(function(error){
+            console.log(error);
+        });
+    }
+
     // Send pay request to server
     function pay() {
+        let itemsIdObject = localStorage.getItem('shopping-bag-items').split(',');
+        let listOfProducts = [];
 
-    }
+        for(let itemidobject of itemsIdObject) {
+            // Split itemidobject
+            let object = itemidobject.split(':')[0];
+            let id = parseInt(itemidobject.split(':')[1]);
+            let amountOfProduct = itemidobject.split('+')[1];
+            
+            if(amountOfProduct===undefined) {
+                amountOfProduct = 1;
+            }
+
+            // Create element
+            listOfProducts.push({'object' :  object , 'id' : id , "amount" : amountOfProduct})
+        }
+
+        let data = {
+            "data" : listOfProducts
+        }
+
+        // Send data get link and redirect to it
+        sendProducts(data);
+    }   
 
     // --------
     

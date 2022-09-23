@@ -112,7 +112,7 @@ export default function MainBar() {
                 </div>
                 
                 <div id='search-form-collapse' className='search-form'>
-                    <form id='searchBar' onSubmit={Searching} className="my-2 my-lg-0">
+                    <form id='searchBarCollapse' onSubmit={Searching} className="my-2 my-lg-0">
                             <input id='searchPhrasePhone' onChange={(e) => setSearchPhrase(e.target.value)} type="text" className='search-box' placeholder="חפש..." aria-required="true"/>
                             <button className="search-button" type="submit"><img src="./icons/search.png" height ="17" width="17" /></button>
                     </form>

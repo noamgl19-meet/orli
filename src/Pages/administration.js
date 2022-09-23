@@ -498,27 +498,6 @@ export default function Administration() {
     document.getElementById("fileAbout").click();
   }
 
-  async function getAsByteArray(file) {
-    console.log(typeof(new Uint8Array(await readFile(file))));
-    setImagesList(new Uint8Array(await readFile(file)));
-    images.push(new Uint8Array(await readFile(file)));
-    return new Uint8Array(await readFile(file))
-  }
-
-  function readFile(file) {
-    return new Promise((resolve, reject) => {
-      // Create file reader
-      let reader = new FileReader()
-  
-      // Register event listeners
-      reader.addEventListener("loadend", e => resolve(e.target.result))
-      reader.addEventListener("error", reject)
-  
-      // Read file
-      reader.readAsArrayBuffer(file)
-    })
-  }
-
   function loadFileAbout(e) {
     e.preventDefault();
     
@@ -665,8 +644,7 @@ export default function Administration() {
     console.log(imageslist,story)
     var data = {
       "story" : story,
-      "images" : imageslist,
-      "extension" : "png"
+      "images" : imageslist
     }
 
     await fetch("https://orlibakeryboutique.herokuapp.com/set_story/", {

@@ -133,3 +133,14 @@ span.psw {
 .subimitation {
     align-items: center;
 }
+
+
+/* For phone */
+@media screen and (max-width: 800px) {
+  .modal-content {
+    background-color: #fefefe;
+    margin: 5% auto 15% auto;
+    border: 1px solid #888;
+    width: 70%;
+  }
+}

@@ -122,12 +122,45 @@ export default function Product(productData, productObject) {
         // Get viewed product id and object
         let id = localStorage.getItem('viewed-product-id');
         let object = localStorage.getItem('viewed-product-object');
+        
+        // Create the phrase
+        let phrase = object + ':' + id;
 
-        // Push new product
-        productsInCart.push(object + ':' + id);
+        // Save list of new products
+        let newProductsInCart = [];
+        let exists = false;
 
+        // Check if phrase already exists in cart
+        for(let product of productsInCart) {
+            // Check if there is already more then one 
+            if(product.split('+')[0]===phrase) {
+                // Check if its about to be the second product
+                if(product.split('+')[1]===undefined) {
+                    newProductsInCart.push(phrase + '+2');
+                }
+                else {
+                    // If more then two take the last amount and increase it by 1
+                    let amount = parseInt(product.split('+')[1]);
+                    newProductsInCart.push(phrase + '+' + (amount + 1));
+                }
+
+                // Turn flag into true  
+                exists = true;
+            }
+            else {
+                // If its the first of that product just insert it
+                newProductsInCart.push(product);
+            }
+        }
+
+        // If object not exits just insert new object
+        if(!exists) {
+            // Push new product
+            newProductsInCart.push(phrase);
+        }
+        
         // Reupload to local storage
-        localStorage.setItem('shopping-bag-items', productsInCart)
+        localStorage.setItem('shopping-bag-items', newProductsInCart)
 
         // Go back to the previous page
         window.location = "/" + productObject;

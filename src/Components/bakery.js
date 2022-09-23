@@ -32,13 +32,15 @@ export default function Bakery(route, data, bannerPath) {
                 tags.push(product.tags);
         }
 
+        let counter = 0;
+
         // Insert tags to the link section
         for (let tag of tags) { 
             // Create anchor element.
             let a = document.createElement('a'); 
                   
             // Set the settings
-            a.id = 'link'; 
+            a.id = 'link-' + counter; 
             a.className = 'link';
             a.innerText = tag;
 
@@ -47,7 +49,12 @@ export default function Bakery(route, data, bannerPath) {
 
             // Add event listner that will show the products
             a.addEventListener("click", () => { getAllProductsFromTag(filteredData, tag) });
+
+            counter++;
         }
+
+        // Auto click first click
+        document.getElementById('link-0').click();
     }
     
     // On button click transfer to product page

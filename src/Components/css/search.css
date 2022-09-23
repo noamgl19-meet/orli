@@ -5,8 +5,8 @@
     margin-right: 20%;
     margin-top: 5%;
     margin-bottom: 10%;
-    border-right: 1px solid #f4ecec;
-    background-color: #f3e7d636;
+    /* border-right: 1px solid #f4ecec;
+    background-color: #f3e7d636; */
 }
 
 .search-title {
@@ -96,8 +96,8 @@
         margin-right: 10%;
         margin-top: 5%;
         margin-bottom: 10%;
-        border-right: 1px solid #f4ecec;
-        background-color: #f3e7d636;
+        /* border-right: 1px solid #f4ecec;
+        background-color: #f3e7d636; */
     }
 
     .search-title {
@@ -133,11 +133,37 @@
         margin-right: 10%;
         margin-top: 5%;
         margin-bottom: 10%;
-        border-right: 1px solid #f4ecec;
-        background-color: #f3e7d636;
+        /* border-right: 1px solid #f4ecec;
+        background-color: #f3e7d636; */
     }
 
     .search-object-img-wrapper {
         width: 50%;
     }
 }
+
+/* New Order CSS */
+
+.search-product-frame {
+    width: 25%;
+    margin: 3%;
+    cursor: pointer;
+    padding: 5%;
+    background-color: #f3e7d636;
+}
+
+
+.search-product-frame:hover {
+    margin-top: 0px;
+    -moz-box-shadow: 0px 0px 4px 1px #d1caca;
+    -webkit-box-shadow: 0px 0px 4px 1px #d1caca;
+    box-shadow: 0px 0px 4px 1px  #d1caca;
+}
+
+.search-product-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    border-bottom: 1px solid #f4ecec;
+}
+
