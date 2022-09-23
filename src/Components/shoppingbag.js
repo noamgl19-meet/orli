@@ -18,6 +18,116 @@ export default function ShoppingBag() {
 
     // --------
 
+    // Update the local storage after each modifycation of product
+    function updateLocalStorage(action, product) {
+        if(action==='+') {
+            // Update the local storage
+
+            let productsInCart = [];
+
+            if(localStorage.getItem('shopping-bag-items')) {
+                productsInCart = localStorage.getItem('shopping-bag-items').split(',');
+            }
+            
+            // Get viewed product id and object
+            let idLocalStorage = product.id;
+            let object = product.object;
+            
+            // Create the phrase
+            let phrase = object + ':' + idLocalStorage;
+
+            // Save list of new products
+            let newProductsInCart = [];
+            let exists = false;
+
+            // Check if phrase already exists in cart
+            for(let product of productsInCart) {
+                // Check if there is already more then one 
+                if(product.split('+')[0]===phrase) {
+                    // Check if its about to be the second product
+                    if(product.split('+')[1]===undefined) {
+                        newProductsInCart.push(phrase + '+2');
+                    }
+                    else {
+                        // If more then two take the last amount and increase it by 1
+                        let amount = parseInt(product.split('+')[1]);
+                        newProductsInCart.push(phrase + '+' + (amount + 1));
+                    }
+
+                    // Turn flag into true  
+                    exists = true;
+                }
+                else {
+                    // If its the first of that product just insert it
+                    newProductsInCart.push(product);
+                }
+            }
+
+            // If object not exits just insert new object
+            if(!exists) {
+                // Push new product
+                newProductsInCart.push(phrase);
+            }
+            
+            // Reupload to local storage
+            localStorage.setItem('shopping-bag-items', newProductsInCart)
+
+        }
+        else {
+            // Update the local storage
+
+            let productsInCart = [];
+
+            if(localStorage.getItem('shopping-bag-items')) {
+                productsInCart = localStorage.getItem('shopping-bag-items').split(',');
+            }
+
+            // Get viewed product id and object
+            let idLocalStorage = product.id;
+            let object = product.object;
+
+            // Create the phrase
+            let phrase = object + ':' + idLocalStorage;
+
+            // Save list of new products
+            let newProductsInCart = [];
+            let exists = false;
+
+            // Check if phrase already exists in cart
+            for(let product of productsInCart) {
+                // Check if there is already more then one 
+                if(product.split('+')[0]===phrase) {
+                    // Check if its about to be the second product
+                    if(product.split('+')[1]===0) {
+                        // Dont do anything to actully erase it
+                    }
+                    else {
+                        // If more then two take the last amount and increase it by 1
+                        let amount = parseInt(product.split('+')[1]);
+                        newProductsInCart.push(phrase + '+' + (amount - 1));
+                    }
+
+                    // Turn flag into true  
+                    exists = true;
+                }
+                else {
+                    // If its the first of that product just insert it
+                    newProductsInCart.push(product);
+                }
+            }
+
+            // If object not exits just insert new object
+            // if(!exists) {
+            //     // Push new product
+            //     newProductsInCart.push(phrase);
+            // }
+
+            // Reupload to local storage
+            localStorage.setItem('shopping-bag-items', newProductsInCart)
+
+        }
+    }
+
     // Adjust amount of product from cart
     function adjustAmount(action, id, product) {
         // Get te id of the product
@@ -47,6 +157,9 @@ export default function ShoppingBag() {
                 deleteCartProduct(product, id);
             }
         }
+
+        // Update local storage
+        updateLocalStorage(action, product);
 
         // Recalculate total price of cart
         calcTotalPriceLoad();
@@ -473,8 +586,6 @@ export default function ShoppingBag() {
         .then(function(link){ 
             // Redirect to the payment page
             window.location.href = link;
-        }).catch(function(error){
-            console.log(error);
         });
     }
 
