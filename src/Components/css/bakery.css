@@ -84,6 +84,7 @@
 }
 
 .product-img {
+    /* width: 50%; */
     width: -webkit-fill-available;
 }
 
@@ -110,7 +111,7 @@
         cursor: pointer;
         width: max-content;
         border: 0;
-        padding: 5px 0px 5px 5px;
+        padding: 5px 0px 5px 5%;
         font-size: 80%;
     }
 

@@ -118,11 +118,11 @@ export default function MainBar() {
                     </form>
                 </div>
 
-                <div id='shopping-bag-wrapper-collapse' className="shopping-bag-img-collapse">
+                {/* <div id='shopping-bag-wrapper-collapse' className="shopping-bag-img-collapse">
                     <a href="/shopping-bag">
                         <img src="./icons/shopping-bag.png" alt='shopping bag' className='logo'></img>
                     </a>
-                </div>
+                </div> */}
 
                 <div className="collapse navbar-collapse nav-content">
                     <a className="aaa name" href="/"><img src='./icons/logo.png' alt='logo' className='logo' id='logo'/></a>
@@ -133,13 +133,13 @@ export default function MainBar() {
                     </form>
 
                     <ul className="menu my-2 my-lg-0">
-                        <li>
+                        {/* <li>
                             <a className="aa" href="/shopping-bag">
                                 <div id='shopping-bag-wrapper' className="shopping-bag-img">
                                     <img src="./icons/shopping-bag.png" alt='shopping bag' className='logo'></img>
                                 </div>
                             </a>
-                        </li>
+                        </li> */}
                         <li>
                             <a className="aa" href="/">
                                 בית

@@ -5,6 +5,7 @@ import './css/product.css'
 
 export default function Product(productData, productObject) {
 
+
     // Create info of product
     if(productData.length!==0) {
         // Save viewed product
@@ -19,7 +20,6 @@ export default function Product(productData, productObject) {
 
     // Fill every thing
     function createInfoProduct() {
-        console.log(productData)
 
         // Set name of product 
         document.getElementById('name').innerHTML = productData.name;
@@ -34,74 +34,79 @@ export default function Product(productData, productObject) {
         document.getElementById('price').innerHTML = productData.price;
         
         // Set image of product
-
+        let images = productData.images.split(',');
+        
         // If more then one
-        if(productData.images.length > 1) {
+        if(images.length > 1) {
+            console.log(images);
+            // Create navigation arrows
+            document.getElementById('LArrow').style.display = 'block';
+            document.getElementById('RArrow').style.display = 'block';
 
+            // Reheight th arrows
+            let height = document.getElementById('product-img').offsetHeight;
+            
+            document.getElementById('LArrow').style.paddingTop = height/2 + 'px';
+            document.getElementById('RArrow').style.paddingTop = height/2 + 'px';
+            // 
+
+            // Create image
+            document.getElementById('product-img').src = images[0];
+
+            // Save the rest of the images
+            // if(sessionStorage.getItem('images')) {
+            //     // Remove any old lists
+            //     // sessionStorage.setItem('images', '')
+            //   }
+            //   else {
+            //     // Upload images
+            //     sessionStorage.setItem('images', images)
+            //   }
+            sessionStorage.setItem('images', images)
         }
         else {
             // if one
-            document.getElementById('add').src = productData.images[0];
+            document.getElementById('product-img').src = images[0];
         }
     }
 
     // Swipe thourgh photos
     function prev() {
-        // // Delete the image with add id in order to replace it
-        // document.getElementById('add').remove();
+        // Get list of all of the images 
+        let images = sessionStorage.getItem('images').split(',');
+
+        //  Get the current img on display
+        let src = document.getElementById('product-img').src;
         
-        // // Create new img and upload it instead of the add sign
-        // var output = new Image();
-        // document.getElementById('image').appendChild(output);
-
-        // // Uploading the picture and add the class
-        // let index;
-        // if(picNum===0) {
-        //     index = files.length;
-        // }
-        // else {
-        //     index = picNum;
-        // }
-
-        // output.src = URL.createObjectURL(files[index - 1]);
-        
-        // // Update index
-        // setPicNum(index - 1);
-
-        // output.classList.add("uploaded-image");
-
-        // // For replace incase user regrades uplodaing an image
-        // output.id = 'add';
-        // output.onclick = uploadImage;
+        for(let i = 0; i<images.length ; i++) {
+            if(images[i]===src) {
+                if(i===0) {
+                    document.getElementById('product-img').src = images[images.length-1];
+                }
+                else {
+                    document.getElementById('product-img').src = images[i-1];
+                }
+            }
+        }
     }
 
     function next() {
-        // // Delete the image with add id in order to replace it
-        // document.getElementById('add').remove();
-            
-        // // Create new img and upload it instead of the add sign
-        // var output = new Image();
-        // document.getElementById('image').appendChild(output);
+        // Get list of all of the images 
+        let images = sessionStorage.getItem('images').split(',');
 
-        // // Uploading the picture and add the class
-        // let index;
-        // if(picNum===files.length - 1) {
-        //     index = -1;
-        // }
-        // else {
-        //     index = picNum;
-        // }
-        
-        // output.src = URL.createObjectURL(files[index + 1]);
+        //  Get the current img on display
+        let src =  document.getElementById('product-img').src;
 
-        // // Update index
-        // setPicNum(index + 1);
-
-        // output.classList.add("uploaded-image");
-
-        // // For replace incase user regrades uplodaing an image
-        // output.id = 'add';
-        // output.onclick = uploadImage;
+        for(let i = 0; i<images.length ; i++) {
+            if(images[i]===src) {
+                if(i===images.length - 1) {
+                    document.getElementById('product-img').src = images[0];
+                }
+                else {
+                    document.getElementById('product-img').src = images[i+1];
+                }
+            }
+        }
     }
 
     //  Quit product page
@@ -173,12 +178,19 @@ export default function Product(productData, productObject) {
                     <span onClick={quitProduct} className="close" title="Close Modal">&#10551;</span>
                 </div>
 
-                <div className='content'>
+                <div className='product-content'>
                     <div className='uploaded-image-product' id='image'>
-                        <img id='add' alt="product-image" className=""/>
+                        
+                        <div className='nav-col-left' onClick={prev}>
+                            <img id='LArrow' src="./icons/arrow-right.png" alt="Left arrow" className="product-prev" />
+                        </div>
 
-                        <img id='LArrow' src="./icons/left-arrow.png" alt="Left arrow" className="prev" onClick={prev}/>
-                        <img id='RArrow' src="./icons/arrow-right.png" alt="Right arrow" className="next" onClick={next}/>
+                        <img id='product-img' alt="product-image" className="product-image"/>
+                        
+                        <div className='nav-col-right' onClick={next}>
+                            <img id='RArrow' src="./icons/arrow-right.png" alt="Right arrow" className="product-next"/>
+                        </div>
+                        
                     </div>
                 
                     <div className='description-product'>
@@ -188,7 +200,7 @@ export default function Product(productData, productObject) {
 
                         <div className='alergic-desc'>
                             <p className='description-desc alergic'>אלרגנים:</p>
-                            <p id='allergic' className='alergic-data'></p>
+                            <p id='allergic' className='alergic-product-data'></p>
                         </div>
 
                         <div className='price-desc'>
@@ -196,9 +208,9 @@ export default function Product(productData, productObject) {
                             <span className='price-product'>&#8362;</span>
                         </div>
 
-                        <div className='add-to-cart-wrapper'>
+                        {/* <div className='add-to-cart-wrapper'>
                             <button id='add-to-cart' className='add-to-cart' onClick={AddToCart}>הוספה לעגלה &#8678;</button>
-                        </div>
+                        </div> */}
                     </div>         
                 </div>
 

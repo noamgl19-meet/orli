@@ -107,8 +107,8 @@ export default function Bakery(route, data, bannerPath) {
             // Set the settings
             productImg.className = 'product-img';
             productImg.id = 'product-img-' + product.name; 
-
-            productImg.src = product.images;
+          
+            productImg.src = product.images.split(',')[0];
 
             // Append the a element to the current img wrapper
             document.getElementById('product-img-wrapper-' + product.name).appendChild(productImg);

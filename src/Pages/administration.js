@@ -1,5 +1,9 @@
 import React, { useState }  from 'react';
 
+
+// import parseDataUrl from "data-uri-to-buffer";
+import FormData from "form-data";
+
 // CSS
 import './css/administration.css'
 
@@ -18,7 +22,6 @@ export default function Administration() {
   }
 
   // Data that being send to server
-  var images = [];
   const [object, setObject] = useState();
   const [imageslist, setImagesList] = useState();
 
@@ -203,7 +206,7 @@ export default function Administration() {
           // Set the settings 
           editObjectImg.id = 'edit-object-img-' + counter;
           editObjectImg.className = 'edit-object-img';
-          editObjectImg.src = searchResult.images[0];
+          editObjectImg.src = searchResult.images.split(',')[0];
 
           // Append the a element
           document.getElementById('edit-object-img-wrapper-' + counter).appendChild(editObjectImg);
@@ -389,18 +392,21 @@ export default function Administration() {
   }
 
   function backToFirst() {
-    // Disaapear forms if exists
-    document.getElementById('id02').style.display = 'none';
-    document.getElementById('id03').style.display = 'none';
-    document.getElementById('id05').style.display = 'none';
+    // // Disaapear forms if exists
+    // document.getElementById('id02').style.display = 'none';
+    // document.getElementById('id03').style.display = 'none';
+    // document.getElementById('id05').style.display = 'none';
 
-    // Make third form disapper
-    const secondForm = document.getElementById('id01');
-    secondForm.style.display = 'none';
+    // // Make third form disapper
+    // const secondForm = document.getElementById('id01');
+    // secondForm.style.display = 'none';
 
-    // Show second form
-    const firstForm = document.getElementById('id00');
-    firstForm.style.display = 'block';
+    // // Show second form
+    // const firstForm = document.getElementById('id00');
+    // firstForm.style.display = 'block';
+
+    // Go back to the administration page
+    window.location = "/administration";
   }
 
   function backToSecond() {
@@ -411,6 +417,57 @@ export default function Administration() {
     // Show second form
     const secondForm = document.getElementById('id01');
     secondForm.style.display = 'block';
+  }
+
+  // Api functions to imgbb
+ 
+  // Create the api request with the blob and get back the new image urls and save them
+  async function getUrlAfterApiToImgbb(blob) {
+    
+    const body = new FormData();
+
+    body.append("image", blob);
+
+    const result = await fetch(
+      `https://api.imgbb.com/1/upload?key=4422534b146cec14f31fca7b7476c61f`, {
+        method: "post",
+        body
+      }
+      ).then(result => result.json())
+      .then(data => {
+
+        // Saves the url
+        // Checks if  
+        let images;
+        
+        if(sessionStorage.getItem('uploaded-images')) {
+          // For multiple images
+          images = sessionStorage.getItem('uploaded-images').split(',');
+          
+          // Push the new image
+          images.push(data.data.display_url);
+
+          // Reupload the updated list of images
+          sessionStorage.setItem('uploaded-images', images)
+        }
+        else {
+          // For first image
+          sessionStorage.setItem('uploaded-images', data.data.display_url)
+        }
+       
+        setImagesList(sessionStorage.getItem('uploaded-images'));
+      });
+  }
+
+  // Create blob from image src
+  function blobMaker(imgSrc) {
+    // Get the remote image as a Blob with the fetch API
+    fetch(imgSrc)
+    .then((res) => res.blob())
+    .then((blob) => {
+        // Read the Blob and send api request to imgbb
+        getUrlAfterApiToImgbb(blob);
+    });
   }
 
 
@@ -424,7 +481,7 @@ export default function Administration() {
 
   function loadFile(e) {
     e.preventDefault();
-    
+
     // Incase of one picture upload
     if(e.target.files.length===1) {
       // Delete images with add id
@@ -441,16 +498,15 @@ export default function Administration() {
 
       // Uploading the picture and add the class
       output.src = URL.createObjectURL(e.target.files[0]);
-      
-      // Saves the url
-      images.push(URL.createObjectURL(e.target.files[0]));
-      setImagesList(images);
 
       output.classList.add("uploaded-image");
 
       // For replace incase user regrades uplodaing an image
       output.id = 'add';
       output.onclick = uploadImage;
+
+      // Create blob and send api request to upload img to imgbb and save in setImagesList
+      blobMaker(output.src);
     }
 
     // Incase of more then one picture upload
@@ -458,7 +514,7 @@ export default function Administration() {
       // Save pictures and index
       setFiles(e.target.files);
       setPicNum(0);
-
+  
       // Delete images with add id
       document.getElementById('add').remove();
       
@@ -471,14 +527,8 @@ export default function Administration() {
 
       // Uploading the picture and add the class
       output.src = URL.createObjectURL(e.target.files[0]);
-      
-      // Saves the url
-      for(let i=0; i<e.target.files.length; i++) {
-        images.push(URL.createObjectURL(e.target.files[i]));
-      }
-      
-      setImagesList(images);
-            
+
+      // Add class
       output.classList.add("uploaded-image");
 
       // Fix CSS
@@ -489,6 +539,12 @@ export default function Administration() {
       // For replace incase user regrades uplodaing an image
       output.id = 'add';
       output.onclick = uploadImage;
+
+      // Saves the url
+      for(let i=0; i<e.target.files.length; i++) {
+        // Create blob and send api request to upload img to imgbb and save in setImagesList
+        blobMaker(URL.createObjectURL(e.target.files[i]));
+      }
     }
   }
 
@@ -515,19 +571,16 @@ export default function Administration() {
 
       // Uploading the picture and add the class
       output.src = URL.createObjectURL(e.target.files[0]);
-
-      // const byteFile = getAsByteArray(e.target.files[0]);
-      console.log(images)
-      setImagesList(e.target.files[0]);
-      // Saves the url
-      // images.push(URL.createObjectURL(e.target.files[0]));
-      // setImagesList(images);
-
+      
+      // CSS fix
       output.classList.add("uploaded-image-about");
 
       // For replace incase user regrades uplodaing an image
       output.id = 'addAbout';
       output.onclick = uploadImageAbout;
+
+      // Create blob and send api request to upload img to imgbb and save in setImagesList
+      blobMaker(output.src);
     }
   }
 
@@ -603,7 +656,10 @@ export default function Administration() {
     description = document.getElementById('description').innerText;
     tags = document.getElementById('tags').innerText;
     allergic = document.getElementById('alergic').innerText;
-   
+    
+    // Delete the images from session storage 
+    sessionStorage.setItem('uploaded-images', '');
+
     var data = {
       "object": object,
       "name": name,
@@ -641,7 +697,7 @@ export default function Administration() {
     let story;
 
     story = document.getElementById('story').innerText;
-    console.log(imageslist,story)
+    // console.log(imageslist,story)
     var data = {
       "story" : story,
       "images" : imageslist

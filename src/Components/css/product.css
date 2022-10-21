@@ -3,28 +3,33 @@
     align-items: center;
 }
 
-.content {
+.product-content {
     display: flex;
-    flex-direction: row;
-    margin: 70px 0px 0px 25%;
+    flex-direction: row-reverse;
+    padding-top: 5%;
+    margin-right: 10%;
+    margin-left: 10%;
+    /* margin: 70px 0px 0px 25%; */
 }
 
 /* Product info */
 .description-product {
-    background-color: #f6f3f1;
+    background-color: #f6f3f191;
     direction: rtl;
-    width: 28%;
+    width: 50%;
     padding: 8% 3% 5% 5%;
-    height: fit-content;
+    height: auto;
     font-size: small;
 }
 
 .uploaded-image-product {
-    padding: 50px;
-    width: 350px;
-    margin-top: 20%;
-    border-right: 1px solid #f4ecec;
-    margin-right: 20px;
+    display: flex;
+    flex-direction: row-reverse;
+    padding: 3%;
+    width: 50%;
+    border-left: 1px solid #f4ecec;
+    margin-left: 20px;
+    direction: rtl;
 }
 
 .title-desc-product {
@@ -65,4 +70,87 @@
 
 .add-to-cart:hover {
     background-color: #f0e1de91;    
+}
+
+.alergic-product-data {
+    margin: auto;
+    margin-right: 1%;
+    margin-top: 0.5%;
+    font-size: 85%;
+}
+
+.product-image {
+    /* width: 90%;
+    margin-right: 5%; */
+    width: -webkit-fill-available;
+}
+
+/* Navigation */
+.nav-col-right {
+    /* padding-top: calc(100%/2); */
+    background-color: #f4ecec;
+    border-radius: 0px 15px 15px 0px;
+    cursor: pointer;
+}
+
+.nav-col-left {
+    /* padding-top: calc(100%/2); */
+    background-color: #f4ecec;
+    border-radius: 15px 0px 0px 15px;
+    cursor: pointer;
+}
+
+.product-prev, .product-next {
+    background-color: #ffffff7d;
+    display: none;
+    border-radius: 50px;
+    cursor: pointer;
+    width: 25px;
+}
+
+.product-prev {
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+}
+
+@media screen and (max-width: 600px) {
+    .product-content {
+        display: flex;
+        flex-direction: row-reverse;
+        padding-top: 30%;
+        margin-right: 10%;
+        margin-left: 10%;
+    }
+
+    .uploaded-image-product {
+        display: flex;
+        flex-direction: row-reverse;
+        padding: 3% 0% 3% 3%;
+        width: 70%;
+        border-left: 1px solid #f4ecec;
+        margin-left: 20px;
+        direction: rtl;
+    }
+
+    .title-desc-product {
+        font-family: 'Heebo-Bold';
+        color: #4e1800;
+        font-size: 180%;
+        font-weight: 600;
+    }
+
+    .alergic-product-data {
+        margin: auto;
+        margin-right: 4%;
+        margin-top: 15.5%;
+        font-size: 70%;
+    }
+
+    .price-product {
+        font-size: 120%;
+        margin-right: 2px;
+        line-height: 1.2;
+        font-family: 'Heebo-Bold';
+        font-weight: 600;
+    }
 }

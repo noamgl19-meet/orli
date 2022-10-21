@@ -7,10 +7,10 @@ export default function Search(searchData) {
 
     // Get search phrase from url
     let searchPhrase = decodeURIComponent(window.location.search.substring(3));  
-
+ 
     
     // Call function 
-    if(document.getElementById('search-space') && searchData.length!==0){
+    if(document.getElementById('search-space') && searchData.length!==0 && searchData!=='Nothing found.'){
         createSearchResults(searchData);
     }
     
@@ -171,7 +171,7 @@ export default function Search(searchData) {
             let productFrame = document.createElement('div'); 
             
             // Set the settings
-            productFrame.id = 'product-frame-' + product.id; 
+            productFrame.id = 'product-frame-' + product.id + '-' + product.object; 
             productFrame.className = 'search-product-frame';
         
             // Append the a element to the current row
@@ -185,36 +185,36 @@ export default function Search(searchData) {
             let productImgWrapper = document.createElement('div'); 
 
             // Set the settings
-            productImgWrapper.className = 'product-img-wrapper';
-            productImgWrapper.id = 'product-img-wrapper-' + product.id; 
+            productImgWrapper.className = 'search-product-img-wrapper';
+            productImgWrapper.id = 'product-img-wrapper-' + product.id + '-' + product.object; 
 
             // Append the a element to the current row
-            document.getElementById('product-frame-' + product.id).appendChild(productImgWrapper);
+            document.getElementById('product-frame-' + product.id + '-' + product.object).appendChild(productImgWrapper);
 
             // ------ Upload img to its wrapper
             let productImg = document.createElement('img'); 
 
             // Set the settings
-            productImg.className = 'product-img';
-            productImg.id = 'product-img-' + product.id; 
-
-            productImg.src = product.images;
+            productImg.className = 'search-product-img';
+            productImg.id = 'product-img-' + product.id + '-' + product.object; 
+            
+            productImg.src = product.images.split(',')[0];
 
             // Append the a element to the current img wrapper
-            document.getElementById('product-img-wrapper-' + product.id).appendChild(productImg);
+            document.getElementById('product-img-wrapper-' + product.id + '-' + product.object).appendChild(productImg);
 
 
             // ------ Upload title to product frame
             let productTitle = document.createElement('p'); 
 
             // Set the settings
-            productTitle.className = 'product-title';
-            productTitle.id = 'product-title-' + product.id; 
+            productTitle.className = 'product-title search-product-title';
+            productTitle.id = 'product-title-' + product.id + '-' + product.object; 
 
             productTitle.innerText = product.name;
 
             // Append the a element to the current frame
-            document.getElementById('product-frame-' + product.id).appendChild(productTitle);
+            document.getElementById('product-frame-' + product.id + '-' + product.object).appendChild(productTitle);
 
 
             // ------ Upload price to product frame
@@ -222,12 +222,12 @@ export default function Search(searchData) {
 
             // Set the settings
             productPrice.className = 'product-price';
-            productPrice.id = 'product-price-' + product.id; 
+            productPrice.id = 'product-price-' + product.id + '-' + product.object; 
 
             productPrice.innerText = `₪`+ product.price;
 
             // Append the a element to the current frame
-            document.getElementById('product-frame-' + product.id).appendChild(productPrice);
+            document.getElementById('product-frame-' + product.id + '-' + product.object).appendChild(productPrice);
         }
     }
 

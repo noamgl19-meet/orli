@@ -22,10 +22,9 @@ export default function About() {
         })
         .then(function(data){ 
             // Insert data to the right place
-            // console.log(data)
             if(document.getElementById('story') && document.getElementById('banner')) {
                 document.getElementById('story').innerText = data.story;
-                document.getElementById('banner').src = data.images;
+                document.getElementById('banner').src = data.images.slice(2,-2);
             }
         });
     }
